@@ -1,4 +1,5 @@
 -- TODO: Transform all types (types.lua) into real and accessible values.
+-- TODO: Better organize the Widget's configure() method. Organizing it into regions is a good solution.
 
 local ROOT = ... --- @type string
 

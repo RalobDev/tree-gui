@@ -4,21 +4,25 @@ local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 
 --- Base class for all GUI elements.
 --- @class TreeGUI.Widget: TreeGUI.Class
---- @field protected _content_proxy TreeGUI.Widget
---- @field protected _tree TreeGUI.Tree?
+--- @field protected _tree TreeGUI.Tree? Tree this Widget belongs to (`nil` while detached).
 --- @field protected _parent TreeGUI.Widget?
---- @field protected _children TreeGUI.Widget[]
---- @field protected _x number
---- @field protected _y number
+--- @field protected _children TreeGUI.Widget[] Includes internal children.
+--- @field protected _content_proxy TreeGUI.Widget Widget that receives the user's children (defaults to self).
+--- @field protected _is_internal boolean Created by the Widget itself: hidden from getChildren() and ignored by Containers.
+--- @field private _is_destroyed boolean
+--- @field private _is_queued_destroy boolean
+--- @field protected _x number X Local position, relative to the parent.
+--- @field protected _y number Y Local position, relative to the parent.
 --- @field protected _width number
 --- @field protected _height number
---- @field protected _min_width number
---- @field protected _min_height number
---- @field protected _size_flags_horizontal TreeGUI.SizeFlags
---- @field protected _size_flags_vertical TreeGUI.SizeFlags
---- @field protected _stretch_ratio number
---- @field protected _combined_min_width number
---- @field protected _combined_min_height number
+--- @field protected _min_width number User-defined minimum width.
+--- @field protected _min_height number User-defined minimum height.
+--- @field private _layout_mode TreeGUI.LayoutMode Ignored when the Widget is a child of a Container.
+--- @field protected _size_flags_horizontal TreeGUI.SizeFlags Only used by Containers.
+--- @field protected _size_flags_vertical TreeGUI.SizeFlags Only used by Containers.
+--- @field protected _stretch_ratio number Share of the free space among expanding siblings (Containers only).
+--- @field protected _combined_min_width number Minimum width after pass 1: max(_min_width, content), without margins.
+--- @field protected _combined_min_height number Minimum height after pass 1: max(_min_height, content), without margins.
 --- @field protected _anchor_left number
 --- @field protected _anchor_top number
 --- @field protected _anchor_right number
@@ -29,22 +33,18 @@ local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 --- @field protected _offset_bottom number
 --- @field protected _grow_direction_horizontal TreeGUI.GrowDirection
 --- @field protected _grow_direction_vertical TreeGUI.GrowDirection
---- @field protected _is_internal boolean
---- @field protected _theme TreeGUI.Theme?
+--- @field private _pending_rect { x: number?, y: number?, w: number?, h: number? }? Rect requested in ANCHOR mode before the Widget was attached; applied on the first layout.
+--- @field protected _theme TreeGUI.Theme? Theme set directly on this Widget (`nil` = inherits).
 --- @field protected _theme_variant string?
---- @field protected _style_override TreeGUI.Theme.WidgetStyle
---- @field protected _visible boolean
---- @field private _is_destroyed boolean
---- @field private _is_queued_destroy boolean
---- @field private _layout_mode TreeGUI.LayoutMode
---- @field private _debug_mode TreeGUI.DebugMode
---- @field private _pending_rect { x: number?, y: number?, w: number?, h: number? }?
---- @field private _opacity number
---- @field private _visual TreeGUI.Widget.VisualState
+--- @field protected _style_override TreeGUI.Theme.WidgetStyle Values set directly on the Widget; they win over the Theme.
 --- @field private _focus_mode TreeGUI.FocusMode
 --- @field private _focus_neighbors table<TreeGUI.FocusSide, TreeGUI.Widget?>
 --- @field private _mouse_filter TreeGUI.MouseFilter
+--- @field protected _visible boolean Hidden Widgets are not drawn, get no input and are ignored by Containers.
+--- @field private _opacity number Range 0-1.
 --- @field private _clip_content boolean
+--- @field private _debug_mode TreeGUI.DebugMode
+--- @field private _visual TreeGUI.Widget.VisualState Draw-only transform (offset, scale, rotation); never affects layout or input.
 local Widget = Class:extend("Widget")
 
 Widget:implement(require(ROOT .. ".core.widget.mixins.widget_box"))
@@ -68,13 +68,15 @@ local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
 --- @field height number?
 --- @field min_width number?
 --- @field min_height number?
+--- @field layout_mode TreeGUI.LayoutMode?
+--- @field size_flags_horizontal TreeGUI.SizeFlags?
+--- @field size_flags_vertical TreeGUI.SizeFlags?
+--- @field stretch_ratio number?
 --- @field margin_left number?
 --- @field margin_top number?
 --- @field margin_right number?
 --- @field margin_bottom number?
---- @field size_flags_horizontal TreeGUI.SizeFlags?
---- @field size_flags_vertical TreeGUI.SizeFlags?
---- @field stretch_ratio number?
+--- @field anchor_preset TreeGUI.AnchorPreset?
 --- @field anchor_left number?
 --- @field anchor_top number?
 --- @field anchor_right number?
@@ -85,12 +87,14 @@ local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
 --- @field offset_bottom number?
 --- @field grow_direction_horizontal TreeGUI.GrowDirection?
 --- @field grow_direction_vertical TreeGUI.GrowDirection?
---- @field layout_mode TreeGUI.LayoutMode?
---- @field anchor_preset TreeGUI.AnchorPreset?
---- @field debug_mode TreeGUI.DebugMode?
 --- @field theme TreeGUI.Theme?
 --- @field theme_variant string?
+--- @field focus_mode TreeGUI.FocusMode?
+--- @field focus_neighbors table<TreeGUI.FocusSide, TreeGUI.Widget>?
+--- @field mouse_filter TreeGUI.MouseFilter?
+--- @field visible boolean?
 --- @field opacity number? (number in the range 0-1)
+--- @field clip_content boolean?
 --- @field visual_offset_x number?
 --- @field visual_offset_y number?
 --- @field visual_scale_x number?
@@ -98,11 +102,7 @@ local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
 --- @field visual_rotation number?
 --- @field visual_pivot_x number?
 --- @field visual_pivot_y number?
---- @field focus_mode TreeGUI.FocusMode?
---- @field focus_neighbors table<TreeGUI.FocusSide, TreeGUI.Widget>?
---- @field mouse_filter TreeGUI.MouseFilter?
---- @field clip_content boolean?
---- @field visible boolean?
+--- @field debug_mode TreeGUI.DebugMode?
 
 --#endregion
 

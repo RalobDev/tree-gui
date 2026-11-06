@@ -3,9 +3,9 @@ local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 2) .. "$") --- @type 
 local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 
 --- @class TreeGUI.Theme: TreeGUI.Class
---- @field private _data TreeGUI.Theme.Data
---- @field private _variants TreeGUI.Theme.Variants
---- @field private _owners table<TreeGUI.Widget|TreeGUI.Tree, true>
+--- @field private _data TreeGUI.Theme.Data Styles by Widget type name (e.g. "Container").
+--- @field private _variants TreeGUI.Theme.Variants Styles by Widget type name and variant name.
+--- @field private _owners table<TreeGUI.Widget|TreeGUI.Tree, true> Widgets/Trees using this Theme, notified on changes. Weak keys, so it does not keep them alive.
 local Theme = Class:extend("Theme")
 
 

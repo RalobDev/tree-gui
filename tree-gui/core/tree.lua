@@ -9,19 +9,19 @@ local DebugDraw = require(ROOT .. ".tools.debug_tool") --- @type TreeGUI.DebugDr
 --- Responsible for handling input, updating, managing states and rendering Widget's.
 --- Without a Tree, a Widget becomes a ghost object.
 --- @class TreeGUI.Tree: TreeGUI.Class
---- @field private _children TreeGUI.Widget[]
---- @field private _x number
---- @field private _y number
---- @field private _width number
---- @field private _height number
---- @field private _layout_dirty boolean
---- @field private _theme_dirty boolean
+--- @field private _children TreeGUI.Widget[] Root Widgets.
+--- @field private _x number X Screen position of the Tree area.
+--- @field private _y number Y Screen position of the Tree area.
+--- @field private _width number Reference width for ANCHOR layouts of the root Widgets.
+--- @field private _height number Reference height for ANCHOR layouts of the root Widgets.
+--- @field private _theme TreeGUI.Theme? Falls back to the default Theme when `nil`.
+--- @field private _layout_dirty boolean Layout is recalculated on the next update().
+--- @field private _theme_dirty boolean Theme-dependent values are refreshed on the next update().
 --- @field private _debug boolean
---- @field private _theme TreeGUI.Theme?
---- @field private _hovered TreeGUI.Widget?
+--- @field private _hovered TreeGUI.Widget? Re-picked every frame in update().
 --- @field private _focus_owner TreeGUI.Widget?
---- @field private _mouse_capture TreeGUI.Widget?
---- @field private _press_targets table<number, TreeGUI.Widget>
+--- @field private _mouse_capture TreeGUI.Widget? While set, it receives all mouse events.
+--- @field private _press_targets table<number, TreeGUI.Widget> Per mouse button: Widget that consumed the press, so it also gets the release.
 local Tree = Class:extend("Tree")
 
 local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
@@ -35,8 +35,8 @@ local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
 --- @field y number?
 --- @field width number?
 --- @field height number?
---- @field debug boolean?
 --- @field theme TreeGUI.Theme?
+--- @field debug boolean?
 
 --#endregion
 

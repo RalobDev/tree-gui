@@ -89,6 +89,13 @@ function Container:_fitChildInRect(child, x, y, width, height)
     local cw, ox = Layout.align(align_h, available_width, child._combined_min_width)
     local ch, oy = Layout.align(align_v, available_height, child._combined_min_height)
 
+    if align_h == "FILL" then
+        ox = ox + Layout.growOffset(child._grow_direction_horizontal, available_width, cw)
+    end
+    if align_v == "FILL" then
+        oy = oy + Layout.growOffset(child._grow_direction_vertical, available_height, ch)
+    end
+
     child._x, child._y = x + margin_left + ox, y + margin_top + oy
     child._width, child._height = cw, ch
 

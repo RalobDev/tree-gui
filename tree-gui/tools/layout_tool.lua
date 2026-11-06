@@ -39,6 +39,22 @@ function Layout.align(align, available, min)
     return min, available - min -- END
 end
 
+--- Offset to apply when `size` exceeds the `available` space, following the grow direction.
+--- Returns 0 when there is no overflow.
+--- @nodiscard
+--- @param grow TreeGUI.GrowDirection
+--- @param available number
+--- @param size number
+--- @return number offset
+function Layout.growOffset(grow, available, size)
+    local overflow = size - available
+    if overflow <= 0 then return 0 end
+
+    if grow == "BEGIN" then return -overflow end
+    if grow == "BOTH" then return -math.floor(overflow / 2) end
+    return 0 -- END
+end
+
 --- Resolves an axis from ANCHOR mode.
 --- @nodiscard
 --- @param anchor_begin number

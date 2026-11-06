@@ -63,18 +63,14 @@ end
 --- @param g number
 --- @param b number
 --- @param a number?
---- @return self
 function ColorRect:setColor(r, g, b, a)
     self._color[1], self._color[2], self._color[3], self._color[4] = r, g, b, a or 1
-    return self
 end
 
 --- Sets the ColorRect color.
 --- @param color TreeGUI.Color
---- @return self
 function ColorRect:setColorTable(color)
     self:setColor(unpack(color))
-    return self
 end
 
 --#endregion

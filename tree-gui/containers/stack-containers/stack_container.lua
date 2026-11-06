@@ -5,8 +5,8 @@ local Layout = require(ROOT .. ".tools.layout_tool") --- @type TreeGUI.Layout
 
 --- Container that arranges its children in a single line (horizontal or vertical).
 --- @class TreeGUI.StackContainer: TreeGUI.Container
---- @field private _orientation TreeGUI.Orientation
---- @field protected _style_override TreeGUI.Theme.StackContainerStyle
+--- @field private _orientation TreeGUI.Orientation Axis of the line. Ignored by StackContainerH/V, which fix it via _getOrientation().
+--- @field protected _style_override TreeGUI.Theme.StackContainerStyle Overrides for margins, paddings and separation.
 local StackContainer = Container:extend("StackContainer")
 
 

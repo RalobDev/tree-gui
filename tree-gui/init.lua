@@ -1,6 +1,17 @@
 -- TODO: Transform all types (types.lua) into real and accessible values.
 -- TODO: Better organize the Widget's configure() method. Organizing it into regions is a good solution.
--- TODO: Rethink whether Theme-related property getters return theme values, or just style_override values.
+--       Keep the order dependency documented: anchor_preset must come BEFORE anchors/offsets/grow_direction.
+-- TODO: Theme-related properties: the getter returns the RESOLVED value (override > theme > default),
+--       and each property gets getXOverride() / setXOverride() (nil = follow the Theme).
+--       Remove the old setX(). Apply to margins, paddings and separation (StackContainer).
+--       Consider a protected _setStyleOverride(key, value) helper to avoid repeating boilerplate.
+--       Props in configure() (e.g. margin_left) keep their names and write the override.
+
+-- ?PERF: getStyleValue() climbs the parent chain on every call. If profiling shows it as a bottleneck
+--        (most likely in _draw, called every frame), add a per-widget cache keyed by a global Theme.revision.
+--        Keep the override OUT of the cache (check it first), bump the revision on any Theme mutation,
+--        setTheme/setThemeVariant, Tree:setTheme and _setTree, and invalidate lazily on read.
+--        Measure first: e.g. 1000 widgets drawing for 10s, with and without the cache.
 
 local ROOT = ... --- @type string
 

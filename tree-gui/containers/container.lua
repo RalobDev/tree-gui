@@ -6,7 +6,7 @@ local DebugDraw = require(ROOT .. ".tools.debug_tool") --- @type TreeGUI.DebugDr
 
 --- Base class for all containers. A Container takes control of the position and size of its children.
 --- @class TreeGUI.Container: TreeGUI.Widget
---- @field protected _style_override TreeGUI.Theme.ContainerStyle
+--- @field protected _style_override TreeGUI.Theme.ContainerStyle Overrides for margins (from Widget) and paddings.
 local Container = Widget:extend("Container")
 
 

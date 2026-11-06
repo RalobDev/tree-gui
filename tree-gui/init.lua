@@ -1,3 +1,5 @@
+-- TODO: Transform all types (types.lua) into real and accessible values.
+
 local ROOT = ... --- @type string
 
 ROOT = ROOT:gsub("%.init$", "") -- Remove ".init" from the ROOT path.

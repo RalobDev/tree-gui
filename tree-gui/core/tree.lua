@@ -534,7 +534,6 @@ end
 
 --- Defines the Tree Theme. If it is `nil`, it will use the default Theme.
 --- @param theme TreeGUI.Theme?
---- @return self
 function Tree:setTheme(theme)
     if theme ~= self._theme then
         if self._theme then self._theme:_removeOwner(self) end
@@ -543,7 +542,6 @@ function Tree:setTheme(theme)
         self._theme = theme
         self:queueUpdateTheme()
     end
-    return self
 end
 
 --- Defines the dimensions of the Tree area.
@@ -556,12 +554,10 @@ end
 
 --- Define the Widget that owns the focus. If `nil`, no widget will have focus.
 --- @param widget TreeGUI.Widget?
---- @return self
 function Tree:setFocusOwner(widget)
     if widget == nil or widget._tree == self then
         self:_setFocusOwner(widget)
     end
-    return self
 end
 
 --#endregion

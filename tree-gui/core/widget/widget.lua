@@ -266,13 +266,9 @@ end
 --#region Setters
 
 --- Enables or disables Widget debugging. If `debug_mode` is `INHERITED`, it follows the parent's debug.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param debug_mode TreeGUI.DebugMode
---- @return T
 function Widget:setDebugMode(debug_mode)
     self._debug_mode = debug_mode
-    return self
 end
 
 --#endregion

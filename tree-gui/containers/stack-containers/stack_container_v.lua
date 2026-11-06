@@ -21,4 +21,25 @@ end
 --#endregion
 
 
+--#region Protected
+
+--- @protected
+--- @return TreeGUI.Orientation
+function StackContainerV:_getOrientation()
+    return "VERTICAL"
+end
+
+--#endregion
+
+
+--#region Setters
+
+--- The orientation of an StackContainerV is fixed.
+function StackContainerV:setOrientation()
+    error("StackContainerV has a fixed orientation. Use StackContainer to change it.")
+end
+
+--#endregion
+
+
 return StackContainerV

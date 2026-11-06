@@ -1,3 +1,7 @@
+-- TODO: Transform all types (types.lua) into real and accessible values.
+-- TODO: Better organize the Widget's configure() method. Organizing it into regions is a good solution.
+-- TODO: Rethink whether Theme-related property getters return theme values, or just style_override values.
+
 local ROOT = ... --- @type string
 
 ROOT = ROOT:gsub("%.init$", "") -- Remove ".init" from the ROOT path.
@@ -9,6 +13,9 @@ local DrawDebug = require(ROOT .. ".tools.debug_tool") --- @type TreeGUI.DebugDr
 local TreeGUI = {
     ColorRect = require(ROOT .. ".visual.color_rect"), --- @type TreeGUI.ColorRect
     Container = require(ROOT .. ".containers.container"), --- @type TreeGUI.Container
+    StackContainer = require(ROOT .. ".containers.stack-containers.stack_container"), --- @type TreeGUI.StackContainer
+    StackContainerH = require(ROOT .. ".containers.stack-containers.stack_container_h"), --- @type TreeGUI.StackContainerH
+    StackContainerV = require(ROOT .. ".containers.stack-containers.stack_container_v"), --- @type TreeGUI.StackContainerV
     Theme = require(ROOT .. ".resources.theme"), --- @type TreeGUI.Theme
     Tree = require(ROOT .. ".core.tree"), --- @type TreeGUI.Tree
     Widget = require(ROOT .. ".core.widget.widget") --- @type TreeGUI.Widget

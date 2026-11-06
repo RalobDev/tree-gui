@@ -15,7 +15,10 @@ local theme = Theme:new {
             padding_top = 0,
             padding_right = 0,
             padding_bottom = 0
-        }
+        },
+        StackContainer = { separation = 4 },
+        HStackContainer = { separation = 4 },
+        VStackContainer = { separation = 4 },
     }
 }
 

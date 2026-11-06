@@ -190,6 +190,7 @@ function Widget:configure(props)
     if props.size_flags_horizontal then self._size_flags_horizontal = props.size_flags_horizontal end
     if props.size_flags_vertical then self._size_flags_vertical = props.size_flags_vertical end
     if props.stretch_ratio then self._stretch_ratio = props.stretch_ratio end
+    if props.anchor_preset then self:setAnchorPreset(props.anchor_preset) end
     if props.anchor_left then self._anchor_left = props.anchor_left end
     if props.anchor_top then self._anchor_top = props.anchor_top end
     if props.anchor_right then self._anchor_right = props.anchor_right end
@@ -215,7 +216,6 @@ function Widget:configure(props)
     self._theme_variant = props.theme_variant
 
     if props.opacity then self:setOpacity(props.opacity) end
-    if props.anchor_preset then self:setAnchorPreset(props.anchor_preset) end
     if props.children then self:addChildren(props.children) end
     if props.theme then self:setTheme(props.theme) end
 

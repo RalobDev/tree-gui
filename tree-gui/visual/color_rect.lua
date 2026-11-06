@@ -3,8 +3,9 @@ local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 2) .. "$") --- @type 
 local Widget = require(ROOT .. ".core.widget.widget") --- @type TreeGUI.Widget
 local Render = require(ROOT .. ".tools.render_tool") --- @type TreeGUI.Render
 
+--- Renders a rectangle filled with a color, covering the Widget's area
 --- @class TreeGUI.ColorRect: TreeGUI.Widget
---- @field private _color TreeGUI.Color
+--- @field private _color TreeGUI.Color Fill color of the rectangle.
 local ColorRect = Widget:extend("ColorRect")
 
 

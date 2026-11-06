@@ -67,3 +67,7 @@
 --- | "bottom"
 --- | "next"
 --- | "previous"
+
+--- @alias TreeGUI.Orientation
+--- | "HORIZONTAL"
+--- | "VERTICAL"

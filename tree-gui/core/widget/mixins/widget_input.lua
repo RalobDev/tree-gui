@@ -177,33 +177,21 @@ end
 
 --#region Setters
 
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param mode TreeGUI.FocusMode
---- @return T
 function Widget:setFocusMode(mode)
     if mode == "NONE" then self:releaseFocus() end
     self._focus_mode = mode
-    return self
 end
 
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param side TreeGUI.FocusSide
 --- @param widget TreeGUI.Widget?
---- @return T
 function Widget:setFocusNeighbor(side, widget)
     self._focus_neighbors[side] = widget
-    return self
 end
 
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param filter TreeGUI.MouseFilter
---- @return T
 function Widget:setMouseFilter(filter)
     self._mouse_filter = filter
-    return self
 end
 
 --#endregion

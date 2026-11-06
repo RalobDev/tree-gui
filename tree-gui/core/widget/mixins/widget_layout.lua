@@ -133,28 +133,20 @@ end
 --- Sets the layout mode of the Widget. In `POSITION` mode, it positions itself freely according to your
 --- position; In `ANCHOR` mode, it positions itself according to its anchors and offsets.
 --- NOTE: layout mode is ignored when the Widget is a child of a Container.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param layout_mode TreeGUI.LayoutMode
---- @return T
 function Widget:setLayoutMode(layout_mode)
     if layout_mode ~= self._layout_mode then
         self._layout_mode = layout_mode
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Applies a preset of anchors and offsets.
 --- Without `width/height`, use the Widget's current dimensions as the desired size.
 --- If this size is smaller than the minimum, the Widget grows in the direction of the preset.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param preset TreeGUI.AnchorPreset
 --- @param width number?
 --- @param height number?
---- @return T
 function Widget:setAnchorPreset(preset, width, height)
     local w, h = width or self._width, height or self._height
     local anchor_l, anchor_r, off_l, off_r, grow_h -- horizontal
@@ -191,15 +183,10 @@ function Widget:setAnchorPreset(preset, width, height)
     self._grow_direction_vertical = grow_v
 
     self:_queueLayout()
-
-    return self
 end
 
 --- Sets the anchors of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param anchors number
---- @return T
 function Widget:setAnchors(anchors)
     if
         anchors ~= self._anchor_left
@@ -213,71 +200,46 @@ function Widget:setAnchors(anchors)
         self._anchor_bottom = anchors
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets then left anchor of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param anchor number
---- @return T
 function Widget:setAnchorLeft(anchor)
     if anchor ~= self._anchor_left then
         self._anchor_left = anchor
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets then top anchor of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param anchor number
---- @return T
 function Widget:setAnchorTop(anchor)
     if anchor ~= self._anchor_top then
         self._anchor_top = anchor
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets then right anchor of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param anchor number
---- @return T
 function Widget:setAnchorRight(anchor)
     if anchor ~= self._anchor_right then
         self._anchor_right = anchor
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets then bottom anchor of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param anchor number
---- @return T
 function Widget:setAnchorBottom(anchor)
     if anchor ~= self._anchor_bottom then
         self._anchor_bottom = anchor
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the offsets of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param offsets number
---- @return T
 function Widget:setOffsets(offsets)
     if
         offsets ~= self._offset_left
@@ -291,71 +253,46 @@ function Widget:setOffsets(offsets)
         self._offset_bottom = offsets
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the left offset of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param offset number
---- @return T
 function Widget:setOffsetLeft(offset)
     if offset ~= self._offset_left then
         self._offset_left = offset
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the top offset of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param offset number
---- @return T
 function Widget:setOffsetTop(offset)
     if offset ~= self._offset_top then
         self._offset_top = offset
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the right offset of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param offset number
---- @return T
 function Widget:setOffsetRight(offset)
     if offset ~= self._offset_right then
         self._offset_right = offset
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the bottom offset of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param offset number
---- @return T
 function Widget:setOffsetBottom(offset)
     if offset ~= self._offset_bottom then
         self._offset_bottom = offset
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the margins of the Widget. If margins is `nil`, the Theme's margins will be used.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param margins number?
---- @return T
 function Widget:setMargins(margins)
     if
         margins ~= self._style_override.margin_left
@@ -371,15 +308,10 @@ function Widget:setMargins(margins)
 
         if not margins then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --- Sets their left margin of the Widget. If margin is `nil`, the Theme's margin will be used.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param margin number?
---- @return T
 function Widget:setMarginLeft(margin)
     if margin ~= self._style_override.margin_left then
         self._style_override.margin_left = margin
@@ -387,15 +319,10 @@ function Widget:setMarginLeft(margin)
 
         if not margin then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --- Sets the top margin of the Widget. If margin is `nil`, the Theme's margin will be used.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param margin number?
---- @return T
 function Widget:setMarginTop(margin)
     if margin ~= self._style_override.margin_top then
         self._style_override.margin_top = margin
@@ -403,15 +330,10 @@ function Widget:setMarginTop(margin)
 
         if not margin then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --- Sets the right margin of the Widget. If margin is `nil`, the Theme's margin will be used.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param margin number?
---- @return T
 function Widget:setMarginRight(margin)
     if margin ~= self._style_override.margin_right then
         self._style_override.margin_right = margin
@@ -419,15 +341,10 @@ function Widget:setMarginRight(margin)
 
         if not margin then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --- Sets the bottom margin of the Widget. If margin is `nil`, the Theme's margin will be used.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param margin number?
---- @return T
 function Widget:setMarginBottom(margin)
     if margin ~= self._style_override.margin_bottom then
         self._style_override.margin_bottom = margin
@@ -435,78 +352,51 @@ function Widget:setMarginBottom(margin)
 
         if not margin then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --- Sets the size flags horizontal of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param size_flags TreeGUI.SizeFlags
---- @return T
 function Widget:setSizeFlagsHorizontal(size_flags)
     if size_flags ~= self._size_flags_horizontal then
         self._size_flags_horizontal = size_flags
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the size flags vertical of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param size_flags TreeGUI.SizeFlags
---- @return T
 function Widget:setSizeFlagsVertical(size_flags)
     if size_flags ~= self._size_flags_vertical then
         self._size_flags_vertical = size_flags
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the Widget's stretch ratio when it is a child of a Container.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param stretch_ratio number
---- @return T
 function Widget:setStretchRatio(stretch_ratio)
     if stretch_ratio ~= self._stretch_ratio then
         self._stretch_ratio = stretch_ratio
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the grow direction horizontal of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param grow_direction TreeGUI.GrowDirection
---- @return T
 function Widget:setGrowDirectionHorizontal(grow_direction)
     if grow_direction ~= self._grow_direction_horizontal then
         self._grow_direction_horizontal = grow_direction
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the grow direction vertical of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param grow_direction TreeGUI.GrowDirection
---- @return T
 function Widget:setGrowDirectionVertical(grow_direction)
     if grow_direction ~= self._grow_direction_vertical then
         self._grow_direction_vertical = grow_direction
         self:_queueLayout()
     end
-
-    return self
 end
 
 --#endregion

@@ -19,11 +19,8 @@ local TreeGUI = {
 
 --- @param layer TreeGUI.DebugDraw.Layers
 --- @param enabled boolean?
---- @return self
 function TreeGUI.setDebugLayerEnabled(layer, enabled)
     DrawDebug.layers[layer] = enabled ~= false
-
-    return TreeGUI
 end
 
 --#endregion

@@ -107,10 +107,7 @@ end
 --#region Setters
 
 --- Defines the Widget Theme. If it is `nil`, it will use the parent's Theme.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param theme TreeGUI.Theme?
---- @return T
 function Widget:setTheme(theme)
     if theme ~= self._theme then
         if self._theme then self._theme:_removeOwner(self) end
@@ -119,19 +116,16 @@ function Widget:setTheme(theme)
         self._theme = theme
         self:queueUpdateTheme()
     end
-    return self
 end
 
 --- Sets the theme variant applied to the Widget. If `nil`, no variants are used during
 --- Theme resolution.
 --- @param theme_variant string?
---- @return self
 function Widget:setThemeVariant(theme_variant)
     if theme_variant ~= self._theme_variant then
         self._theme_variant = theme_variant
         self:queueUpdateTheme()
     end
-    return self
 end
 
 --#endregion

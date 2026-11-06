@@ -182,11 +182,9 @@ end
 
 --- Sets the opacity (number in the range 0-1) of the Widget.
 --- @param opacity number
---- @return self
 function Widget:setOpacity(opacity)
     self._opacity = math.min(1, math.max(opacity, 0))
     self._visible = self._opacity == 0 and false or true
-    return self
 end
 
 --- Enables or disables clipping of the Widget's drawing and children to its own rect.
@@ -198,21 +196,16 @@ end
 
 --- Shows or hides the Widget. A hidden Widget (and its children) is not drawn,
 --- does not receive input, cannot be focused and is ignored by Containers.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param visible boolean?
---- @return T
 function Widget:setVisible(visible)
     visible = visible ~= false
-    if visible == self._visible then return self end
+    if visible == self._visible then return end
 
     self._opacity = visible and self._opacity or 0
 
     self._visible = visible
     self:_queueLayout()
     if not visible then self:_releaseInputState() end
-
-    return self
 end
 
 --#endregion

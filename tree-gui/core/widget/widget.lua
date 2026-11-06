@@ -229,18 +229,6 @@ function Widget:queueDestroy()
     self._is_queued_destroy = true
 end
 
---- Returns `true` if the Widget is queued to be destroyed in the next Tree update.
---- @nodiscard
---- @return boolean is_destroyed
-function Widget:isQueuedDestroyed()
-    return self._is_queued_destroy
-end
-
---- Returns `true` if the Widget is destroyed.
-function Widget:isDestroyed()
-    return self._is_destroyed
-end
-
 --#endregion
 
 
@@ -278,13 +266,9 @@ end
 --#region Setters
 
 --- Enables or disables Widget debugging. If `debug_mode` is `INHERITED`, it follows the parent's debug.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param debug_mode TreeGUI.DebugMode
---- @return T
 function Widget:setDebugMode(debug_mode)
     self._debug_mode = debug_mode
-    return self
 end
 
 --#endregion
@@ -298,6 +282,20 @@ end
 --- @return TreeGUI.DebugMode debug_mode
 function Widget:getDebugMode()
     return self._debug_mode
+end
+
+--- Returns `true` if the Widget is queued to be destroyed in the next Tree update.
+--- @nodiscard
+--- @return boolean is_destroyed
+function Widget:isQueuedDestroyed()
+    return self._is_queued_destroy
+end
+
+--- Returns `true` if the Widget is destroyed.
+--- @nodiscard
+--- @return boolean
+function Widget:isDestroyed()
+    return self._is_destroyed
 end
 
 --#endregion

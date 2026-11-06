@@ -103,30 +103,25 @@ end
 --- Sets (replaces) the style of a Widget type.
 --- @param type_name TreeGUI.Theme.WidgetType
 --- @param style TreeGUI.Theme.WidgetStyle
---- @return self
 function Theme:setStyle(type_name, style)
     self._data[type_name] = shallowCopy(style)
     self:_queueUpdate()
-    return self
 end
 
 --- Sets (replaces) the style of a variant of a Widget type.
 --- @param type_name TreeGUI.Theme.WidgetType
 --- @param variant_name string
 --- @param style TreeGUI.Theme.WidgetStyle
---- @return self
 function Theme:setVariantStyle(type_name, variant_name, style)
     self._variants[type_name] = self._variants[type_name] or {}
     self._variants[type_name][variant_name] = shallowCopy(style)
     self:_queueUpdate()
-    return self
 end
 
 --- Sets (replaces) the value of a Widget style. Creates the style of the type if it doesn't exist.
 --- @param type_name TreeGUI.Theme.WidgetType
 --- @param key string
 --- @param value any
---- @return self
 function Theme:setStyleValue(type_name, key, value)
     local data = self._data[type_name]
     if not data then
@@ -138,7 +133,6 @@ function Theme:setStyleValue(type_name, key, value)
         data[key] = value
         self:_queueUpdate()
     end
-    return self
 end
 
 --- Sets (replaces) the value of a variant of a Widget style.
@@ -147,7 +141,6 @@ end
 --- @param variant_name string
 --- @param key string
 --- @param value any
---- @return self
 function Theme:setVariantStyleValue(type_name, variant_name, key, value)
     self._variants[type_name] = self._variants[type_name] or {}
     self._variants[type_name][variant_name] = self._variants[type_name][variant_name] or {}
@@ -157,7 +150,6 @@ function Theme:setVariantStyleValue(type_name, variant_name, key, value)
         style[key] = value
         self:_queueUpdate()
     end
-    return self
 end
 
 --#endregion

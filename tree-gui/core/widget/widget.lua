@@ -229,18 +229,6 @@ function Widget:queueDestroy()
     self._is_queued_destroy = true
 end
 
---- Returns `true` if the Widget is queued to be destroyed in the next Tree update.
---- @nodiscard
---- @return boolean is_destroyed
-function Widget:isQueuedDestroyed()
-    return self._is_queued_destroy
-end
-
---- Returns `true` if the Widget is destroyed.
-function Widget:isDestroyed()
-    return self._is_destroyed
-end
-
 --#endregion
 
 
@@ -298,6 +286,20 @@ end
 --- @return TreeGUI.DebugMode debug_mode
 function Widget:getDebugMode()
     return self._debug_mode
+end
+
+--- Returns `true` if the Widget is queued to be destroyed in the next Tree update.
+--- @nodiscard
+--- @return boolean is_destroyed
+function Widget:isQueuedDestroyed()
+    return self._is_queued_destroy
+end
+
+--- Returns `true` if the Widget is destroyed.
+--- @nodiscard
+--- @return boolean
+function Widget:isDestroyed()
+    return self._is_destroyed
 end
 
 --#endregion

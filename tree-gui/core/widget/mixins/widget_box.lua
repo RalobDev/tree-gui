@@ -128,46 +128,28 @@ end
 --#region Setters
 
 --- Sets the local X and Y position of the Widget relative to its parent.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param x number
 --- @param y number
---- @return T
 function Widget:setPosition(x, y)
     self:_setRect(x, y, nil, nil)
-
-    return self
 end
 
 --- Sets the local X position of the Widget relative to its parent.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param x number
---- @return T
 function Widget:setX(x)
     self:_setRect(x, nil, nil, nil)
-
-    return self
 end
 
 --- Sets the local Y position of the Widget relative to its parent.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param y number
---- @return T
 function Widget:setY(y)
     self:_setRect(nil, y, nil, nil)
-
-    return self
 end
 
 --- Sets the absolute position of the Widget in global screen space.
 --- Automatically converts global coordinates into local space based on the parent's global position.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param gx number
 --- @param gy number
---- @return T
 function Widget:setGlobalPosition(gx, gy)
     local px, py = 0, 0
 
@@ -175,101 +157,59 @@ function Widget:setGlobalPosition(gx, gy)
         px, py = self._parent:getGlobalPosition()
     end
     self:setPosition(gx - px, gy - py)
-
-    return self
 end
 
 --- Sets the absolute X position of the Widget in global screen space while preserving its global Y position.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param gx number
---- @return T
 function Widget:setGlobalX(gx)
     self:setGlobalPosition(gx, self:getGlobalY())
-
-    return self
 end
 
 --- Sets the absolute Y position of the Widget in global screen space while preserving its global X position.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param gy number
---- @return T
 function Widget:setGlobalY(gy)
     self:setGlobalPosition(self:getGlobalX(), gy)
-
-    return self
 end
 
 --- Sets the dimensions of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param width number
 --- @param height number
---- @return T
 function Widget:setDimensions(width, height)
     self:_setRect(nil, nil, width, height)
-
-    return self
 end
 
 --- Sets the width of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param width number
---- @return T
 function Widget:setWidth(width)
     self:_setRect(nil, nil, width, nil)
-
-    return self
 end
 
 --- Sets the height of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param height number
---- @return T
 function Widget:setHeight(height)
     self:_setRect(nil, nil, nil, height)
-
-    return self
 end
 
 --- Sets the minimum dimensions of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param min_width number
 --- @param min_height number
---- @return T
 function Widget:setMinimumDimensions(min_width, min_height)
     if min_width ~= self._min_width or min_height ~= self._min_height then
         self._min_width, self._min_height = min_width, min_height
         self:_queueLayout()
     end
-
-    return self
 end
 
 --- Sets the minimum width of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param min_width number
---- @return T
 function Widget:setMinimumWidth(min_width)
     self:setMinimumDimensions(min_width, self._min_height)
-
-    return self
 end
 
 --- Sets the minimum height of the Widget.
---- @generic T: TreeGUI.Widget
---- @param self T
 --- @param min_height number
---- @return T
 function Widget:setMinimumHeight(min_height)
     self:setMinimumDimensions(self._min_width, min_height)
-
-    return self
 end
 
 --#endregion

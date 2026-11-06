@@ -6,6 +6,7 @@ local current_alpha = 1 --- @type number
 local stack = {} --- @type number[]
 local depth = 0 --- @type number
 
+
 --#region Public
 
 --- Multiplies the inherited alpha by `alpha`. Must be paired with `popModulateAlpha`.

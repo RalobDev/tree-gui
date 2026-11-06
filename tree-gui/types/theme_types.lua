@@ -4,6 +4,8 @@
 --- @alias TreeGUI.Theme.WidgetType
 --- | "Container"
 --- | "StackContainer"
+--- | "StackContainerH"
+--- | "StackContainerV"
 --- | "Widget"
 
 --- Theme data: one optional style table per Widget type name.

@@ -1,5 +1,6 @@
 -- TODO: Transform all types (types.lua) into real and accessible values.
 -- TODO: Better organize the Widget's configure() method. Organizing it into regions is a good solution.
+-- TODO: Rethink whether Theme-related property getters return theme values, or just style_override values.
 
 local ROOT = ... --- @type string
 

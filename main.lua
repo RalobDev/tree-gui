@@ -2,10 +2,11 @@
 
 local debug_hint = true
 local TreeGUI = require("tree-gui.init")
-    .setDebugLayerEnabled("margin", true)
-    .setDebugLayerEnabled("padding", true)
-    .setDebugLayerEnabled("content", true)
-    .setDebugLayerEnabled("anchors", true)
+
+TreeGUI.setDebugLayerEnabled("margin", true)
+TreeGUI.setDebugLayerEnabled("padding", true)
+TreeGUI.setDebugLayerEnabled("content", true)
+TreeGUI.setDebugLayerEnabled("anchors", true)
 
 local Tree = TreeGUI.Tree:new {
     debug = true

@@ -24,6 +24,7 @@ local DrawDebug = require(ROOT .. ".tools.debug_tool") --- @type TreeGUI.DebugDr
 local TreeGUI = {
     ColorRect = require(ROOT .. ".visual.color_rect"), --- @type TreeGUI.ColorRect
     Container = require(ROOT .. ".containers.container"), --- @type TreeGUI.Container
+    Enums = require(ROOT .. ".types.enums"), --- @type TreeGUI.Enums
     StackContainer = require(ROOT .. ".containers.stack-containers.stack_container"), --- @type TreeGUI.StackContainer
     StackContainerH = require(ROOT .. ".containers.stack-containers.stack_container_h"), --- @type TreeGUI.StackContainerH
     StackContainerV = require(ROOT .. ".containers.stack-containers.stack_container_v"), --- @type TreeGUI.StackContainerV

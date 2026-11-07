@@ -6,10 +6,22 @@ local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 local Render = require(ROOT .. ".tools.render_tool") --- @type TreeGUI.Render
 local DebugDraw = require(ROOT .. ".tools.debug_tool") --- @type TreeGUI.DebugDraw
 local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
+local Signal = require(ROOT .. ".core.signal") --- @type TreeGUI.Signal
 
 --- Responsible for handling input, updating, managing states and rendering Widget's.
 --- Without a Tree, a Widget becomes a ghost object.
 --- @class TreeGUI.Tree: TreeGUI.Class
+--- @field on_child_entered TreeGUI.Signal<fun(child: TreeGUI.Widget)> Called when a child enters the Tree.
+--- @field on_child_exited TreeGUI.Signal<fun(child: TreeGUI.Widget)> Called when a child leaves the Tree.
+--- @field on_layout_updated TreeGUI.Signal<fun()> Called when the Tree layout is updated.
+--- @field on_focus_changed TreeGUI.Signal<fun(new_owner: TreeGUI.Widget?, old_owner: TreeGUI.Widget?)> Called when the focus of the Tree changes.
+--- @field on_hovered_changed TreeGUI.Signal<fun(new_hovered: TreeGUI.Widget?, old_hovered: TreeGUI.Widget?)> Called when the element hovered by the mouse in the Tree changes.
+--- @field on_keypressed TreeGUI.Signal<fun(key: love.KeyConstant, scancode: love.Scancode, isrepeat: boolean)> Called when the Tree receives a key pressed.
+--- @field on_keyreleased TreeGUI.Signal<fun(key: love.KeyConstant, scancode: love.Scancode)> Called when the Tree receives a key released.
+--- @field on_mousepressed TreeGUI.Signal<fun(x: number, y: number, button: number, istouch: boolean, presses: number)> Called when the Tree receives a mouse pressed.
+--- @field on_mousereleased TreeGUI.Signal<fun(x: number, y: number, button: number, istouch: boolean, presses: number)> Called when the Tree receives a mouse released.
+--- @field on_mousemoved TreeGUI.Signal<fun(x: number, y: number, dx: number, dy: number, istouch: boolean)> Called when the Tree receives a mouse moved.
+--- @field on_wheelmoved TreeGUI.Signal<fun(x: number, y: number)> Called when the Tree receives a wheel moved.
 --- @field private _children TreeGUI.Widget[] Root Widgets.
 --- @field private _x number X Screen position of the Tree area.
 --- @field private _y number Y Screen position of the Tree area.
@@ -135,6 +147,17 @@ end
 function Tree:new(props)
     local obj = Class.new(self)
 
+    obj.on_child_entered = Signal:new()
+    obj.on_child_exited = Signal:new()
+    obj.on_layout_updated = Signal:new()
+    obj.on_focus_changed = Signal:new()
+    obj.on_hovered_changed = Signal:new()
+    obj.on_keypressed = Signal:new()
+    obj.on_keyreleased = Signal:new()
+    obj.on_mousepressed = Signal:new()
+    obj.on_mousereleased = Signal:new()
+    obj.on_mousemoved = Signal:new()
+    obj.on_wheelmoved = Signal:new()
     obj._children = {}
     obj._x = 0
     obj._y = 0
@@ -230,6 +253,7 @@ function Tree:removeChildAt(index)
         table.remove(self._children, index)
         self._layout_dirty = true
         child:_setTree(nil)
+        self:_emitSignal(self.on_child_exited, child)
     end
 end
 
@@ -273,6 +297,7 @@ function Tree:addChild(child)
     self._layout_dirty = true
     self._theme_dirty = true
     child:_setTree(self)
+    self:_emitSignal(self.on_child_entered, child)
 end
 
 --- Adds children to Tree.
@@ -344,6 +369,8 @@ end
 --- @param isrepeat boolean
 --- @return boolean consumed
 function Tree:keypressed(key, scancode, isrepeat)
+    self:_emitSignal(self.on_keypressed, key, scancode, isrepeat)
+
     local owner = self._focus_owner
     if owner and owner:_onKeyPressed(key, scancode, isrepeat) then return true end
 
@@ -360,6 +387,8 @@ end
 --- @param scancode love.Scancode
 --- @return boolean consumed
 function Tree:keyreleased(key, scancode)
+    self:_emitSignal(self.on_keyreleased, key, scancode)
+
     local owner = self._focus_owner
     return owner ~= nil and owner:_onKeyReleased(key, scancode) == true
 end
@@ -372,6 +401,8 @@ end
 --- @return boolean consumed
 function Tree:mousepressed(x, y, button, istouch, presses)
     x, y = x - self._x, y - self._y
+
+    self:_emitSignal(self.on_mousepressed, x, y, button, istouch, presses)
 
     local capture = self._mouse_capture
     if capture then
@@ -414,6 +445,8 @@ end
 function Tree:mousereleased(x, y, button, istouch, presses)
     x, y = x - self._x, y - self._y
 
+    self:_emitSignal(self.on_mousereleased, x, y, button, istouch, presses)
+
     local press_target = self._press_targets[button]
     self._press_targets[button] = nil
 
@@ -434,6 +467,8 @@ end
 function Tree:mousemoved(x, y, dx, dy, istouch)
     x, y = x - self._x, y - self._y
 
+    self:_emitSignal(self.on_mousemoved, x, y, dx, dy, istouch)
+
     local capture = self._mouse_capture
     if capture then
         capture:_receiveMouse("_onMouseMoved", x, y, dx, dy, istouch)
@@ -450,6 +485,8 @@ end
 --- @param y number
 --- @return boolean consumed
 function Tree:wheelmoved(x, y)
+    self:_emitSignal(self.on_wheelmoved, x, y)
+
     local mx, my = love.mouse.getPosition()
     mx, my = mx - self._x, my - self._y
 
@@ -460,6 +497,13 @@ end
 
 
 --#region Private
+
+--- @private
+--- @param signal TreeGUI.Signal
+--- @param ... any
+function Tree:_emitSignal(signal, ...)
+    signal:_emit(...)
+end
 
 --- Updates the layout of the children following two phases (bottom-up) and (top-down).
 --- @private
@@ -476,6 +520,7 @@ function Tree:_updateLayout()
         end
     end
     self._layout_dirty = false
+    self:_emitSignal(self.on_layout_updated)
 end
 
 --- Updates the values ​​of the children related to the Theme.
@@ -656,6 +701,8 @@ function Tree:_setFocusOwner(widget)
     self._focus_owner = widget
     if old then old:_onFocusExited() end
     if widget then widget:_onFocusEntered() end
+
+    self:_emitSignal(self.on_focus_changed, widget, old)
 end
 
 --- @private
@@ -667,6 +714,8 @@ function Tree:_setHovered(widget)
     self._hovered = widget
     if old then old:_onMouseExited() end
     if widget then widget:_onMouseEntered() end
+
+    self:_emitSignal(self.on_hovered_changed, widget, old)
 end
 
 --#endregion

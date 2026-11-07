@@ -2,6 +2,7 @@ local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 4) .. "$") --- @type 
 
 local DebugDraw = require(ROOT .. ".tools.debug_tool") --- @type TreeGUI.DebugDraw
 local Render = require(ROOT .. ".tools.render_tool") --- @type TreeGUI.Render
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 
 --- @class TreeGUI.Widget
 local Widget = {}
@@ -85,10 +86,10 @@ end
 --- because there the anchors are ignored.
 --- @protected
 function Widget:_drawAnchorsDebug()
-    if self._layout_mode ~= "ANCHOR" then return end
+    if self._layout_mode ~= Enums.LayoutMode.ANCHOR then return end
 
     local parent = self._parent
-    if parent and not self._is_internal and parent:is("Container") then return end
+    if parent and not self._is_internal and parent:is(Enums.ClassName.Container) then return end
 
     local pw, ph
     if parent then
@@ -158,9 +159,9 @@ function Widget:_renderDebug(inherited)
     if not self._visible then return end
 
     local enabled = inherited
-    if self._debug_mode == "ENABLED" then
+    if self._debug_mode == Enums.DebugMode.ENABLED then
         enabled = true
-    elseif self._debug_mode == "DISABLED" then
+    elseif self._debug_mode == Enums.DebugMode.DISABLED then
         enabled = false
     end
 

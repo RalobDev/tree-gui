@@ -149,7 +149,7 @@ function Widget:getStyleValue(key, ignore_override)
     end
 
     local chain = getStyleChain(self)
-    local type_name = self:getClassName() --- @cast type_name TreeGUI.Theme.WidgetType
+    local type_name = self:getClassName() --- @cast type_name TreeGUI.Enums.ThemeType
 
     local current = self --- @type TreeGUI.Widget?
     while current do

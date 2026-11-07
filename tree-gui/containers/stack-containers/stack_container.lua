@@ -121,15 +121,11 @@ function StackContainer:setOrientation(orientation)
     end
 end
 
---- Sets the separation (space between children). If `nil`, the Theme's separation will be used.
---- @param separation number
+--- Sets the StackContainer's separation (space between children). The override value takes priority over the theme.
+--- If `separation` is `nil`, remove the override.
+--- @param separation number?
 function StackContainer:setSeparation(separation)
-    if separation ~= self._style_override.separation then
-        self._style_override.separation = separation
-        self:_queueLayout()
-
-        if not separation then self:queueUpdateTheme() end
-    end
+    self:_setStyleOverride("separation", separation)
 end
 
 --#endregion
@@ -144,10 +140,18 @@ function StackContainer:getOrientation()
     return self:_getOrientation()
 end
 
---- Gets the separation override. If `nil`, the Theme's separation will be used.
+--- Returns the StackContainer's resolved separation,
+--- this includes the one defined by Theme if overrides have not been defined.
+--- @nodiscard
+--- @return number separation
+function StackContainer:getSeparation()
+    return self:_getStyleValue("separation")
+end
+
+--- Returns the separation override by the StackContainer. Does not include the one used by Theme.
 --- @nodiscard
 --- @return number? separation
-function StackContainer:getSeparation()
+function StackContainer:getSeparationOverride()
     return self._style_override.separation
 end
 

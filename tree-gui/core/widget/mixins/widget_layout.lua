@@ -384,7 +384,7 @@ end
 --- NOTE: layout mode has no influence when it is a child of a Container.
 --- @nodiscard
 --- @return TreeGUI.Enums.LayoutMode layout_mode
-function Widget:getLayoutMode(layout_mode)
+function Widget:getLayoutMode()
     return self._layout_mode
 end
 

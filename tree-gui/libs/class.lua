@@ -14,7 +14,7 @@
 --
 
 --- @class TreeGUI.Class
---- @field private _class_name TreeGUI.Class.ClassName Unique class name.
+--- @field private _class_name TreeGUI.Enums.ClassName Unique class name.
 --- @field private _inheritances string[] Parent class name in the inheritance tree.
 local Class = {}
 Class.__index = Class
@@ -37,7 +37,7 @@ end
 --- @nodiscard
 --- @generic T : TreeGUI.Class
 --- @param self T
---- @param class_name TreeGUI.Class.ClassName Unique class name.
+--- @param class_name TreeGUI.Enums.ClassName Unique class name.
 --- @return T
 function Class:extend(class_name)
     local cls = {}
@@ -82,7 +82,7 @@ end
 
 --- Returns true if then class name matches the given name.
 --- @nodiscard
---- @param class_name TreeGUI.Class.ClassName Unique class name.
+--- @param class_name TreeGUI.Enums.ClassName Unique class name.
 --- @return boolean
 function Class:is(class_name)
     if self._class_name == class_name then
@@ -100,14 +100,14 @@ end
 
 --- Returns the name of the class.
 --- @nodiscard
---- @return TreeGUI.Class.ClassName
+--- @return TreeGUI.Enums.ClassName
 function Class:getClassName()
     return self._class_name
 end
 
 --- Returns the inheritances of the class.
 --- @nodiscard
---- @return TreeGUI.Class.ClassName[]
+--- @return TreeGUI.Enums.ClassName[]
 function Class:getInheritances()
     local inheritances = {}
     for _, inheri in ipairs(self._inheritances) do

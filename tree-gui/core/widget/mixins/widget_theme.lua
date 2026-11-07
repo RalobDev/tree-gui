@@ -133,16 +133,54 @@ end
 
 --#region Getters
 
+--- Returns the Theme set directly on this Widget (`nil` if it inherits from the parent).
+--- @nodiscard
+--- @return TreeGUI.Theme? theme
+function Widget:getTheme()
+    return self._theme
+end
+
+--- Returns the theme variant applied to the Widget. If `nil`, no variants are used during
+--- Theme resolution.
+--- @nodiscard
+--- @return string? theme_variant
+function Widget:getThemeVariant()
+    return self._theme_variant
+end
+
+--#endregion
+
+
+--#region Protected Setters
+
+--- @protected
+--- @param key string
+--- @param value any
+function Widget:_setStyleOverride(key, value)
+    if value == self._style_override[key] then return end
+
+    self._style_override[key] = value
+    self:_queueLayout()
+
+    if value == nil then self:queueUpdateTheme() end
+end
+
+--#endregion
+
+
+--#region Protected Getters
+
 --- Resolves a style value. Priority:
 --- 1. Widget override (only for the widget itself).
 --- 2. Theme of the widget, then of each ancestor, looking up the type of THIS widget
 ---    (and its base types, e.g. Button -> Container -> Widget).
 --- 3. Default theme.
+--- @protected
 --- @nodiscard
 --- @param key string
 --- @param ignore_override boolean?
 --- @return any?
-function Widget:getStyleValue(key, ignore_override)
+function Widget:_getStyleValue(key, ignore_override)
     if not ignore_override then
         local override_value = self._style_override[key] --- @type any
         if override_value ~= nil then return override_value end
@@ -183,21 +221,6 @@ function Widget:getStyleValue(key, ignore_override)
     end
 
     return lookup(DEFAULT_THEME, chain, key)
-end
-
---- Returns the Theme set directly on this Widget (`nil` if it inherits from the parent).
---- @nodiscard
---- @return TreeGUI.Theme? theme
-function Widget:getTheme()
-    return self._theme
-end
-
---- Returns the theme variant applied to the Widget. If `nil`, no variants are used during
---- Theme resolution.
---- @nodiscard
---- @return string? theme_variant
-function Widget:getThemeVariant()
-    return self._theme_variant
 end
 
 --#endregion

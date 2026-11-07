@@ -103,10 +103,10 @@ end
 --- @param parent_height number?
 --- @return boolean changed
 function Widget:_applyAnchoredRect(x, y, width, height, parent_width, parent_height)
-    local margin_left = self:getStyleValue("margin_left")
-    local margin_right = self:getStyleValue("margin_right")
-    local margin_top = self:getStyleValue("margin_top")
-    local margin_bottom = self:getStyleValue("margin_bottom")
+    local margin_left = self:_getStyleValue("margin_left")
+    local margin_right = self:_getStyleValue("margin_right")
+    local margin_top = self:_getStyleValue("margin_top")
+    local margin_bottom = self:_getStyleValue("margin_bottom")
 
     local left, right = rectToOffsets(
         x, width, parent_width, margin_left, margin_right,

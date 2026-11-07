@@ -46,10 +46,10 @@ end
 function Container:configure(props)
     Widget.configure(self, props)
 
-    if props.padding_left then self:setPaddingLeft(props.padding_left) end
-    if props.padding_top then self:setPaddingTop(props.padding_top) end
-    if props.padding_right then self:setPaddingRight(props.padding_right) end
-    if props.padding_bottom then self:setPaddingBottom(props.padding_bottom) end
+    if props.padding_left then self:setPaddingLeftOverride(props.padding_left) end
+    if props.padding_top then self:setPaddingTopOverride(props.padding_top) end
+    if props.padding_right then self:setPaddingRightOverride(props.padding_right) end
+    if props.padding_bottom then self:setPaddingBottomOverride(props.padding_bottom) end
 end
 
 --#endregion
@@ -79,10 +79,10 @@ end
 function Container:_fitChildInRect(child, x, y, width, height)
     local _, align_h = Layout.parseFlags(child._size_flags_horizontal)
     local _, align_v = Layout.parseFlags(child._size_flags_vertical)
-    local margin_left = child:getStyleValue("margin_left")
-    local margin_top = child:getStyleValue("margin_top")
-    local margin_right = child:getStyleValue("margin_right")
-    local margin_bottom = child:getStyleValue("margin_bottom")
+    local margin_left = child:_getStyleValue("margin_left")
+    local margin_top = child:_getStyleValue("margin_top")
+    local margin_right = child:_getStyleValue("margin_right")
+    local margin_bottom = child:_getStyleValue("margin_bottom")
 
     local available_width = width - margin_left - margin_right
     local available_height = height - margin_top - margin_bottom
@@ -156,92 +156,42 @@ end
 
 --#region Setters
 
---- Sets the paddings of the Container. If paddings is `nil`, the Theme's paddings will be used.
---- @generic T: TreeGUI.Container
---- @param self T
+--- Sets all Container's paddings. The override value takes priority over the theme.
+--- If `paddings` is `nil`, remove the override.
 --- @param paddings number?
---- @return T
-function Container:setPaddings(paddings)
-    if
-        paddings ~= self._style_override.padding_left
-        or paddings ~= self._style_override.padding_top
-        or paddings ~= self._style_override.padding_right
-        or paddings ~= self._style_override.padding_bottom
-    then
-        self._style_override.padding_left = paddings
-        self._style_override.padding_top = paddings
-        self._style_override.padding_right = paddings
-        self._style_override.padding_bottom = paddings
-        self:_queueLayout()
-
-        if not paddings then self:queueUpdateTheme() end
-    end
-
-    return self
+function Container:setPaddingsOverride(paddings)
+    self:_setStyleOverride("padding_left", paddings)
+    self:_setStyleOverride("padding_top", paddings)
+    self:_setStyleOverride("padding_right", paddings)
+    self:_setStyleOverride("padding_bottom", paddings)
 end
 
---- Sets the left padding of then Container. If padding is `nil`, the Theme's padding will be used.
---- @generic T: TreeGUI.Container
---- @param self T
+--- Sets the Container's left padding. The override value takes priority over the theme.
+--- If `padding` is `nil`, remove the override.
 --- @param padding number?
---- @return T
-function Container:setPaddingLeft(padding)
-    if padding ~= self._style_override.padding_left then
-        self._style_override.padding_left = padding
-        self:_queueLayout()
-
-        if not padding then self:queueUpdateTheme() end
-    end
-
-    return self
+function Container:setPaddingLeftOverride(padding)
+    self:_setStyleOverride("padding_left", padding)
 end
 
---- Sets the top padding of then Container. If padding is `nil`, the Theme's padding will be used.
---- @generic T: TreeGUI.Container
---- @param self T
+--- Sets the Container's top padding. The override value takes priority over the theme.
+--- If `padding` is `nil`, remove the override.
 --- @param padding number?
---- @return T
-function Container:setPaddingTop(padding)
-    if padding ~= self._style_override.padding_top then
-        self._style_override.padding_top = padding
-        self:_queueLayout()
-
-        if not padding then self:queueUpdateTheme() end
-    end
-
-    return self
+function Container:setPaddingTopOverride(padding)
+    self:_setStyleOverride("padding_top", padding)
 end
 
---- Sets the right padding of then Container. If padding is `nil`, the Theme's padding will be used.
---- @generic T: TreeGUI.Container
---- @param self T
+--- Sets the Container's right padding. The override value takes priority over the theme.
+--- If `padding` is `nil`, remove the override.
 --- @param padding number?
---- @return T
-function Container:setPaddingRight(padding)
-    if padding ~= self._style_override.padding_right then
-        self._style_override.padding_right = padding
-        self:_queueLayout()
-
-        if not padding then self:queueUpdateTheme() end
-    end
-
-    return self
+function Container:setPaddingRightOverride(padding)
+    self:_setStyleOverride("padding_right", padding)
 end
 
---- Sets the bottom padding of then Container. If padding is `nil`, the Theme's padding will be used.
---- @generic T: TreeGUI.Container
---- @param self T
+--- Sets the Container's bottom padding. The override value takes priority over the theme.
+--- If `padding` is `nil`, remove the override.
 --- @param padding number?
---- @return T
-function Container:setPaddingBottom(padding)
-    if padding ~= self._style_override.padding_bottom then
-        self._style_override.padding_bottom = padding
-        self:_queueLayout()
-
-        if not padding then self:queueUpdateTheme() end
-    end
-
-    return self
+function Container:setPaddingBottomOverride(padding)
+    self:_setStyleOverride("padding_bottom", padding)
 end
 
 --#endregion
@@ -249,39 +199,84 @@ end
 
 --#region Getters
 
---- Gets the paddings of the Container. If paddings is `nil`, the Theme's paddings will be used.
+--- Gets the Container's resolved paddings,
+--- this includes those defined by Theme if overrides have not been defined.
 --- @nodiscard
---- @return number? padding_left, number? paddign_top, number? padding_right, number? padding_bottom
+--- @return number padding_left, number paddign_top, number padding_right, number padding_bottom
 function Container:getPaddings()
-    local style = self._style_override
-    return style.padding_left, style.padding_top, style.padding_right, style.padding_bottom
+    return self:_getStyleValue("padding_left"),
+           self:_getStyleValue("padding_top"),
+           self:_getStyleValue("padding_right"),
+           self:_getStyleValue("padding_bottom")
 end
 
---- Gets the left padding of then Container. If padding is `nil`, the Theme's padding will be used.
+--- Returns the Container's resolved left padding,
+--- this includes the one defined by Theme if overrides have not been defined.
 --- @nodiscard
---- @return number? padding
+--- @return number padding_left
 function Container:getPaddingLeft()
+    return self:_getStyleValue("padding_left")
+end
+
+--- Returns the Container's resolved top padding,
+--- this includes the one defined by Theme if overrides have not been defined.
+--- @nodiscard
+--- @return number padding_top
+function Container:getPaddingTop()
+    return self:_getStyleValue("padding_top")
+end
+
+--- Returns the Container's resolved right padding,
+--- this includes the one defined by Theme if overrides have not been defined.
+--- @nodiscard
+--- @return number padding_right
+function Container:getPaddingRight()
+    return self:_getStyleValue("padding_right")
+end
+
+--- Returns the Container's resolved bottom padding,
+--- this includes the one defined by Theme if overrides have not been defined.
+--- @nodiscard
+--- @return number padding_bottom
+function Container:getPaddingBottom()
+    return self:_getStyleValue("padding_bottom")
+end
+
+--- Returns the paddings overrides by the Container. Does not include those used by Theme.
+--- @nodiscard
+--- @return number? padding_left, number? paddign_top, number? padding_right, number? padding_bottom
+function Container:getPaddingsOverride()
+    return self._style_override.padding_left,
+           self._style_override.padding_top,
+           self._style_override.padding_right,
+           self._style_override.padding_bottom
+end
+
+--- Returns the left padding override by the Container. Does not include the one used by Theme.
+--- @nodiscard
+--- @return number? padding_left
+function Container:getPaddingLeftOverride()
     return self._style_override.padding_left
 end
 
---- Gets the top padding of then Container. If padding is `nil`, the Theme's padding will be used.
+--- Returns the top padding override by the Container. Does not include the one used by Theme.
 --- @nodiscard
---- @return number? padding
-function Container:getPaddingTop()
+--- @return number? padding_top
+function Container:getPaddingTopOverride()
     return self._style_override.padding_top
 end
 
---- Gets the right padding of then Container. If padding is `nil`, the Theme's padding will be used.
+--- Returns the right padding override by the Container. Does not include the one used by Theme.
 --- @nodiscard
---- @return number? padding
-function Container:getPaddingRight()
+--- @return number? padding_right
+function Container:getPaddingRightOverride()
     return self._style_override.padding_right
 end
 
---- Gets the bottom padding of then Container. If padding is `nil`, the Theme's padding will be used.
+--- Returns the bottom padding override by the Container. Does not include the one used by Theme.
 --- @nodiscard
---- @return number? padding
-function Container:getPaddingBottom()
+--- @return number? padding_bottom
+function Container:getPaddingBottomOverride()
     return self._style_override.padding_bottom
 end
 
@@ -295,10 +290,10 @@ end
 --- @nodiscard
 --- @return number x, number y, number width, number height
 function Container:_getContentRect()
-    local padding_left = self:getStyleValue("padding_left")
-    local padding_top = self:getStyleValue("padding_top")
-    local padding_right = self:getStyleValue("padding_right")
-    local padding_bottom = self:getStyleValue("padding_bottom")
+    local padding_left = self:_getStyleValue("padding_left")
+    local padding_top = self:_getStyleValue("padding_top")
+    local padding_right = self:_getStyleValue("padding_right")
+    local padding_bottom = self:_getStyleValue("padding_bottom")
 
     return padding_left,
            padding_top,
@@ -325,10 +320,10 @@ end
 --- @nodiscard
 --- @return number min_width, number min_height
 function Container:_getContentMinimumDimensions()
-    local padding_left = self:getStyleValue("padding_left")
-    local padding_top = self:getStyleValue("padding_top")
-    local padding_right = self:getStyleValue("padding_right")
-    local padding_bottom = self:getStyleValue("padding_bottom")
+    local padding_left = self:_getStyleValue("padding_left")
+    local padding_top = self:_getStyleValue("padding_top")
+    local padding_right = self:_getStyleValue("padding_right")
+    local padding_bottom = self:_getStyleValue("padding_bottom")
 
     local width, height = self:_getChildrenMinimumDimensions()
     return width + padding_left + padding_right,

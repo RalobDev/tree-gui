@@ -62,10 +62,10 @@ end
 --- @protected
 function Widget:_drawDebug()
     local w, h = self._width, self._height
-    local margin_left = self:getStyleValue("margin_left")
-    local margin_right = self:getStyleValue("margin_right")
-    local margin_top = self:getStyleValue("margin_top")
-    local margin_bottom = self:getStyleValue("margin_bottom")
+    local margin_left = self:_getStyleValue("margin_left")
+    local margin_right = self:_getStyleValue("margin_right")
+    local margin_top = self:_getStyleValue("margin_top")
+    local margin_bottom = self:_getStyleValue("margin_bottom")
 
     -- Margin: between the outer rectangle (with margins) and the Widget.
     if DebugDraw.layers.margin then
@@ -100,10 +100,10 @@ function Widget:_drawAnchorsDebug()
         return
     end
 
-    local margin_left = self:getStyleValue("margin_left")
-    local margin_right = self:getStyleValue("margin_right")
-    local margin_top = self:getStyleValue("margin_top")
-    local margin_bottom = self:getStyleValue("margin_bottom")
+    local margin_left = self:_getStyleValue("margin_left")
+    local margin_right = self:_getStyleValue("margin_right")
+    local margin_top = self:_getStyleValue("margin_top")
+    local margin_bottom = self:_getStyleValue("margin_bottom")
 
     local aw = math.max(0, pw - margin_left - margin_right)
     local ah = math.max(0, ph - margin_top - margin_bottom)
@@ -185,7 +185,6 @@ end
 --- @param opacity number
 function Widget:setOpacity(opacity)
     self._opacity = math.min(1, math.max(opacity, 0))
-    self._visible = self._opacity == 0 and false or true
 end
 
 --- Enables or disables clipping of the Widget's drawing and children to its own rect.
@@ -201,8 +200,6 @@ end
 function Widget:setVisible(visible)
     visible = visible ~= false
     if visible == self._visible then return end
-
-    self._opacity = visible and self._opacity or 0
 
     self._visible = visible
     self:_queueLayout()

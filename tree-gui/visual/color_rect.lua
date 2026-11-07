@@ -26,9 +26,7 @@ local ColorRect = Widget:extend("ColorRect")
 function ColorRect:new(props)
     local obj = Widget.new(self, props)
 
-    obj._color = {1, 1, 1, 1}
-
-    if props then obj:configure(props) end
+    obj._color = obj._color or {1, 1, 1, 1}
 
     return obj
 end

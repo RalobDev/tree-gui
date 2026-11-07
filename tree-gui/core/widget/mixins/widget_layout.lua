@@ -82,10 +82,10 @@ function Widget:_resolveFreeLayout(parent_width, parent_height)
             self:_applyAnchoredRect(r.x, r.y, r.w, r.h, parent_width, parent_height)
         end
 
-        local margin_left = self:getStyleValue("margin_left")
-        local margin_top = self:getStyleValue("margin_top")
-        local margin_right = self:getStyleValue("margin_right")
-        local margin_bottom = self:getStyleValue("margin_bottom")
+        local margin_left = self:_getStyleValue("margin_left")
+        local margin_top = self:_getStyleValue("margin_top")
+        local margin_right = self:_getStyleValue("margin_right")
+        local margin_bottom = self:_getStyleValue("margin_bottom")
 
         local area_width = math.max(0, parent_width - margin_left - margin_right)
         local area_height = math.max(0, parent_height - margin_top - margin_bottom)
@@ -292,67 +292,42 @@ function Widget:setOffsetBottom(offset)
     end
 end
 
---- Sets the margins of the Widget. If margins is `nil`, the Theme's margins will be used.
+--- Sets all Widget's margins. The override value takes priority over the theme.
+--- If `margins` is `nil`, remove the override.
 --- @param margins number?
-function Widget:setMargins(margins)
-    if
-        margins ~= self._style_override.margin_left
-        or margins ~= self._style_override.margin_top
-        or margins ~= self._style_override.margin_right
-        or margins ~= self._style_override.margin_bottom
-    then
-        self._style_override.margin_left = margins
-        self._style_override.margin_top = margins
-        self._style_override.margin_right = margins
-        self._style_override.margin_bottom = margins
-        self:_queueLayout()
-
-        if not margins then self:queueUpdateTheme() end
-    end
+function Widget:setMarginsOverride(margins)
+    self:setMarginLeftOverride(margins)
+    self:setMarginTopOverride(margins)
+    self:setMarginRightOverride(margins)
+    self:setMarginBottomOverride(margins)
 end
 
---- Sets their left margin of the Widget. If margin is `nil`, the Theme's margin will be used.
+--- Sets the Widget's left margin. The override value takes priority over the theme.
+--- If `margins` is `nil`, remove the override.
 --- @param margin number?
-function Widget:setMarginLeft(margin)
-    if margin ~= self._style_override.margin_left then
-        self._style_override.margin_left = margin
-        self:_queueLayout()
-
-        if not margin then self:queueUpdateTheme() end
-    end
+function Widget:setMarginLeftOverride(margin)
+    self:_setStyleOverride("margin_left", margin)
 end
 
---- Sets the top margin of the Widget. If margin is `nil`, the Theme's margin will be used.
+--- Sets the Widget's top margin. The override value takes priority over the theme.
+--- If `margins` is `nil`, remove the override.
 --- @param margin number?
-function Widget:setMarginTop(margin)
-    if margin ~= self._style_override.margin_top then
-        self._style_override.margin_top = margin
-        self:_queueLayout()
-
-        if not margin then self:queueUpdateTheme() end
-    end
+function Widget:setMarginTopOverride(margin)
+    self:_setStyleOverride("margin_top", margin)
 end
 
---- Sets the right margin of the Widget. If margin is `nil`, the Theme's margin will be used.
+--- Sets the Widget's right margin. The override value takes priority over the theme.
+--- If `margins` is `nil`, remove the override.
 --- @param margin number?
-function Widget:setMarginRight(margin)
-    if margin ~= self._style_override.margin_right then
-        self._style_override.margin_right = margin
-        self:_queueLayout()
-
-        if not margin then self:queueUpdateTheme() end
-    end
+function Widget:setMarginRightOverride(margin)
+    self:_setStyleOverride("margin_right", margin)
 end
 
---- Sets the bottom margin of the Widget. If margin is `nil`, the Theme's margin will be used.
+--- Sets the Widget's bottom margin. The override value takes priority over the theme.
+--- If `margins` is `nil`, remove the override.
 --- @param margin number?
-function Widget:setMarginBottom(margin)
-    if margin ~= self._style_override.margin_bottom then
-        self._style_override.margin_bottom = margin
-        self:_queueLayout()
-
-        if not margin then self:queueUpdateTheme() end
-    end
+function Widget:setMarginBottomOverride(margin)
+    self:_setStyleOverride("margin_bottom", margin)
 end
 
 --- Sets the size flags horizontal of the Widget.
@@ -409,42 +384,88 @@ end
 --- NOTE: layout mode has no influence when it is a child of a Container.
 --- @nodiscard
 --- @return TreeGUI.Enums.LayoutMode layout_mode
-function Widget:getLayoutMode(layout_mode)
+function Widget:getLayoutMode()
     return self._layout_mode
 end
 
---- Gets the margins of then Widget in pixels. If margins is `nil`, the Theme's margins will be used.
+--- Returns the Widget's resolved margins,
+--- this includes those defined by Theme if overrides have not been defined.
 --- @nodiscard
---- @return number? margin_left, number? margin_top, number? margin_right, number? margin_bottom
+--- @return number margin_left, number margin_top, number margin_right, number margin_bottom
 function Widget:getMargins()
-    return self._style_override.margin_left, self._style_override.margin_top, self._style_override.margin_right, self._style_override.margin_bottom
+    return self:_getStyleValue("margin_left"),
+           self:_getStyleValue("margin_top"),
+           self:_getStyleValue("margin_right"),
+           self:_getStyleValue("margin_bottom")
 end
 
---- Gets the left margin of then Widget in pixels. If margin is `nil`, the Theme's margin will be used.
+--- Returns the Widget's resolved left margin,
+--- this includes the one defined by Theme if overrides have not been defined.
+--- @nodiscard
+--- @return number margin_left
+function Widget:getMarginLeft()
+    return self:_getStyleValue("margin_left")
+end
+
+--- Returns the Widget's resolved top margin,
+--- this includes the one defined by Theme if overrides have not been defined.
+--- @nodiscard
+--- @return number margin_top
+function Widget:getMarginTop()
+    return self:_getStyleValue("margin_top")
+end
+
+--- Returns the Widget's resolved right margin,
+--- this includes the one defined by Theme if overrides have not been defined.
+--- @nodiscard
+--- @return number margin_right
+function Widget:getMarginRight()
+    return self:_getStyleValue("margin_right")
+end
+
+--- Returns the Widget's resolved bottom margin,
+--- this includes the one defined by Theme if overrides have not been defined.
+--- @nodiscard
+--- @return number margin_bottom
+function Widget:getMarginBottom()
+    return self:_getStyleValue("margin_bottom")
+end
+
+--- Returns the margins overrides by the Widget. Does not include those used by Theme.
+--- @nodiscard
+--- @return number? margin_left, number? margin_top, number? margin_right, number? margin_bottom
+function Widget:getMarginsOverride()
+    return self._style_override.margin_left,
+           self._style_override.margin_top,
+           self._style_override.margin_right,
+           self._style_override.margin_bottom
+end
+
+--- Returns the left margin override by the Widget. Does not include the one used by Theme.
 --- @nodiscard
 --- @return number? margin_left
-function Widget:getMarginLeft()
+function Widget:getMarginLeftOverride()
     return self._style_override.margin_left
 end
 
---- Gets the top margin of then Widget in pixels. If margin is `nil`, the Theme's margin will be used.
+--- Returns the top margin override by the Widget. Does not include the one used by Theme.
 --- @nodiscard
 --- @return number? margin_top
-function Widget:getMarginTop()
+function Widget:getMarginTopOverride()
     return self._style_override.margin_top
 end
 
---- Gets the right margin of then Widget in pixels. If margin is `nil`, the Theme's margin will be used.
+--- Returns the right margin override by the Widget. Does not include the one used by Theme.
 --- @nodiscard
 --- @return number? margin_right
-function Widget:getMarginRight()
+function Widget:getMarginRightOverride()
     return self._style_override.margin_right
 end
 
---- Gets the bottom margin of then Widget in pixels. If margin is `nil`, the Theme's margin will be used.
+--- Returns the bottom margin override by the Widget. Does not include the one used by Theme.
 --- @nodiscard
 --- @return number? margin_bottom
-function Widget:getMarginBottom()
+function Widget:getMarginBottomOverride()
     return self._style_override.margin_bottom
 end
 
@@ -570,10 +591,10 @@ end
 --- @protected
 --- @return number w, number h
 function Widget:_getOuterMinimumSize()
-    local margin_left = self:getStyleValue("margin_left")
-    local margin_top = self:getStyleValue("margin_top")
-    local margin_right = self:getStyleValue("margin_right")
-    local margin_bottom = self:getStyleValue("margin_bottom")
+    local margin_left = self:_getStyleValue("margin_left")
+    local margin_top = self:_getStyleValue("margin_top")
+    local margin_right = self:_getStyleValue("margin_right")
+    local margin_bottom = self:_getStyleValue("margin_bottom")
 
     return self._combined_min_width  + margin_left + margin_right,
            self._combined_min_height + margin_top  + margin_bottom

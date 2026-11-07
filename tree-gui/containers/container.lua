@@ -157,10 +157,7 @@ end
 --#region Setters
 
 --- Sets the paddings of the Container. If paddings is `nil`, the Theme's paddings will be used.
---- @generic T: TreeGUI.Container
---- @param self T
 --- @param paddings number?
---- @return T
 function Container:setPaddings(paddings)
     if
         paddings ~= self._style_override.padding_left
@@ -176,15 +173,10 @@ function Container:setPaddings(paddings)
 
         if not paddings then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --- Sets the left padding of then Container. If padding is `nil`, the Theme's padding will be used.
---- @generic T: TreeGUI.Container
---- @param self T
 --- @param padding number?
---- @return T
 function Container:setPaddingLeft(padding)
     if padding ~= self._style_override.padding_left then
         self._style_override.padding_left = padding
@@ -192,15 +184,10 @@ function Container:setPaddingLeft(padding)
 
         if not padding then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --- Sets the top padding of then Container. If padding is `nil`, the Theme's padding will be used.
---- @generic T: TreeGUI.Container
---- @param self T
 --- @param padding number?
---- @return T
 function Container:setPaddingTop(padding)
     if padding ~= self._style_override.padding_top then
         self._style_override.padding_top = padding
@@ -208,15 +195,10 @@ function Container:setPaddingTop(padding)
 
         if not padding then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --- Sets the right padding of then Container. If padding is `nil`, the Theme's padding will be used.
---- @generic T: TreeGUI.Container
---- @param self T
 --- @param padding number?
---- @return T
 function Container:setPaddingRight(padding)
     if padding ~= self._style_override.padding_right then
         self._style_override.padding_right = padding
@@ -224,15 +206,10 @@ function Container:setPaddingRight(padding)
 
         if not padding then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --- Sets the bottom padding of then Container. If padding is `nil`, the Theme's padding will be used.
---- @generic T: TreeGUI.Container
---- @param self T
 --- @param padding number?
---- @return T
 function Container:setPaddingBottom(padding)
     if padding ~= self._style_override.padding_bottom then
         self._style_override.padding_bottom = padding
@@ -240,8 +217,6 @@ function Container:setPaddingBottom(padding)
 
         if not padding then self:queueUpdateTheme() end
     end
-
-    return self
 end
 
 --#endregion

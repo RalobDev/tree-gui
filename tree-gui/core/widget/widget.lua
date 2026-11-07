@@ -71,6 +71,7 @@ Widget:implement(require(ROOT .. ".core.widget.mixins.widget_visual"))
 --- @field size_flags_horizontal TreeGUI.Enums.SizeFlags?
 --- @field size_flags_vertical TreeGUI.Enums.SizeFlags?
 --- @field stretch_ratio number?
+--- @field margins number?
 --- @field margin_left number?
 --- @field margin_top number?
 --- @field margin_right number?
@@ -182,6 +183,7 @@ function Widget:configure(props)
     if props.height then self._height = props.height end
     if props.min_width then self._min_width = props.min_width end
     if props.min_height then self._min_height = props.min_height end
+    if props.margins then self:setMarginsOverride(props.margins) end
     if props.margin_left then self._style_override.margin_left = props.margin_left end
     if props.margin_top then self._style_override.margin_top = props.margin_top end
     if props.margin_right then self._style_override.margin_right = props.margin_right end

@@ -14,6 +14,7 @@ local Container = Widget:extend("Container")
 --#region Definitions
 
 --- @class TreeGUI.Container.Props: TreeGUI.Widget.Props
+--- @field paddings number?
 --- @field padding_left number?
 --- @field padding_top number?
 --- @field padding_right number?
@@ -46,6 +47,7 @@ end
 function Container:configure(props)
     Widget.configure(self, props)
 
+    if props.paddings then self:setPaddingsOverride(props.paddings) end
     if props.padding_left then self:setPaddingLeftOverride(props.padding_left) end
     if props.padding_top then self:setPaddingTopOverride(props.padding_top) end
     if props.padding_right then self:setPaddingRightOverride(props.padding_right) end

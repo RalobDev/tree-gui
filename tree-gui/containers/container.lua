@@ -3,6 +3,7 @@ local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 2) .. "$") --- @type 
 local Widget = require(ROOT .. ".core.widget.widget") --- @type TreeGUI.Widget
 local Layout = require(ROOT .. ".tools.layout_tool") --- @type TreeGUI.Layout
 local DebugDraw = require(ROOT .. ".tools.debug_tool") --- @type TreeGUI.DebugDraw
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 
 --- Base class for all containers. A Container takes control of the position and size of its children.
 --- @class TreeGUI.Container: TreeGUI.Widget
@@ -33,7 +34,7 @@ function Container:new(props)
     local obj = Widget.new(self, props) --- @cast obj TreeGUI.Container
 
     if not (props and props.mouse_filter) then
-        obj:setMouseFilter("PASS")
+        obj:setMouseFilter(Enums.MouseFilter.PASS)
     end
 
     return obj
@@ -89,10 +90,10 @@ function Container:_fitChildInRect(child, x, y, width, height)
     local cw, ox = Layout.align(align_h, available_width, child._combined_min_width)
     local ch, oy = Layout.align(align_v, available_height, child._combined_min_height)
 
-    if align_h == "FILL" then
+    if align_h == Enums.SizeFlagsAlignment.FILL then
         ox = ox + Layout.growOffset(child._grow_direction_horizontal, available_width, cw)
     end
-    if align_v == "FILL" then
+    if align_v == Enums.SizeFlagsAlignment.FILL then
         oy = oy + Layout.growOffset(child._grow_direction_vertical, available_height, ch)
     end
 

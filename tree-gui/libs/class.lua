@@ -20,17 +20,6 @@ local Class = {}
 Class.__index = Class
 Class._class_name = "Class"
 
---- @alias TreeGUI.Class.ClassName
---- | "Class"
---- | "ColorRect"
---- | "Container"
---- | "StackContainer"
---- | "StackContainerH"
---- | "StackContainerV"
---- | "Theme"
---- | "Tree"
---- | "Widget"
-
 
 --#region Public
 

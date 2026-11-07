@@ -1,6 +1,19 @@
 --- @class TreeGUI.Enums
 local Enums = {}
 
+--- @enum TreeGUI.Enums.ClassName
+Enums.ClassName = {
+    Class = "Class",
+    ColorRect = "ColorRect",
+    Container = "Container",
+    StackContainer = "StackContainer",
+    StackContainerH = "StackContainerH",
+    StackContainerV = "StackContainerV",
+    Theme = "Theme",
+    Tree = "Tree",
+    Widget = "Widget",
+}
+
 --- @enum TreeGUI.Enums.ThemeType
 Enums.ThemeType = {
     Container = "Container",

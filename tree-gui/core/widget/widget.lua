@@ -56,8 +56,6 @@ Widget:implement(require(ROOT .. ".core.widget.mixins.widget_render"))
 Widget:implement(require(ROOT .. ".core.widget.mixins.widget_theme"))
 Widget:implement(require(ROOT .. ".core.widget.mixins.widget_visual"))
 
-local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
-
 
 --#region Definitions
 

@@ -1,6 +1,15 @@
 --- @class TreeGUI.Enums
 local Enums = {}
 
+--- @enum TreeGUI.Enums.ThemeType
+Enums.ThemeType = {
+    Container = "Container",
+    StackContainer = "StackContainer",
+    StackContainerH = "StackContainerH",
+    StackContainerV = "StackContainerV",
+    Widget = "Widget"
+}
+
 --- Way in which a Widget is positioned.
 --- @enum TreeGUI.Enums.LayoutMode
 Enums.LayoutMode = {

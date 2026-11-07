@@ -103,12 +103,12 @@ Enums.FocusMode = {
 
 --- @enum TreeGUI.Enums.FocusSide
 Enums.FocusSide = {
-    left = "left",
-    top = "top",
-    right = "right",
-    bottom = "bottom",
-    next = "next",
-    previous = "previous"
+    LEFT = "LEFT",
+    TOP = "TOP",
+    RIGHT = "RIGHT",
+    BOTTOM = "BOTTOM",
+    NEXT = "NEXT",
+    PREVIOUS = "PREVIOUS"
 }
 
 --- @enum TreeGUI.Enums.Orientation

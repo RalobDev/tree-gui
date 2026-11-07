@@ -25,7 +25,12 @@ local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 --- @field private _press_targets table<number, TreeGUI.Widget> Per mouse button: Widget that consumed the press, so it also gets the release.
 local Tree = Class:extend("Tree")
 
-local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
+local NAV_KEYS = {
+    left = Enums.FocusSide.LEFT,
+    up = Enums.FocusSide.TOP,
+    right = Enums.FocusSide.RIGHT,
+    down = Enums.FocusSide.BOTTOM
+}
 
 
 --#region Definitions
@@ -91,9 +96,9 @@ local function findSpatial(owner, list, side)
             local dx, dy = cx + w._width / 2 - ox, cy + w._height / 2 - oy
 
             local primary, secondary
-            if side == Enums.FocusSide.left then primary, secondary = -dx, dy
-            elseif side == Enums.FocusSide.right then primary, secondary = dx, dy
-            elseif side == Enums.FocusSide.top then primary, secondary = -dy, dx
+            if side == Enums.FocusSide.LEFT then primary, secondary = -dx, dy
+            elseif side == Enums.FocusSide.RIGHT then primary, secondary = dx, dy
+            elseif side == Enums.FocusSide.TOP then primary, secondary = -dy, dx
             else primary, secondary = dy, dx end
 
             if primary > 0 then
@@ -302,14 +307,14 @@ function Tree:navigateFocus(side)
         if #list == 0 then return false end
 
         if not owner then
-            target = (side == Enums.FocusSide.previous) and list[#list] or list[1]
-        elseif side == Enums.FocusSide.next or side == Enums.FocusSide.previous then
+            target = (side == Enums.FocusSide.PREVIOUS) and list[#list] or list[1]
+        elseif side == Enums.FocusSide.NEXT or side == Enums.FocusSide.PREVIOUS then
             local index
             for i, w in ipairs(list) do
                 if w == owner then index = i break end
             end
             if index then
-                local step = side == Enums.FocusSide.next and 1 or -1
+                local step = side == Enums.FocusSide.NEXT and 1 or -1
                 target = list[(index - 1 + step) % #list + 1] -- wraps around
             else
                 target = list[1]
@@ -326,12 +331,12 @@ end
 
 --- @return boolean moved
 function Tree:focusNext()
-    return self:navigateFocus(Enums.FocusSide.next)
+    return self:navigateFocus(Enums.FocusSide.NEXT)
 end
 
 --- @return boolean moved
 function Tree:focusPrevious()
-    return self:navigateFocus(Enums.FocusSide.previous)
+    return self:navigateFocus(Enums.FocusSide.PREVIOUS)
 end
 
 --- @param key love.KeyConstant
@@ -344,7 +349,7 @@ function Tree:keypressed(key, scancode, isrepeat)
 
     local side = NAV_KEYS[key]
     if key == "tab" then
-        side = love.keyboard.isDown("lshift", "rshift") and Enums.FocusSide.previous or Enums.FocusSide.next
+        side = love.keyboard.isDown("lshift", "rshift") and Enums.FocusSide.PREVIOUS or Enums.FocusSide.NEXT
     end
     if side then return self:navigateFocus(side) end
 

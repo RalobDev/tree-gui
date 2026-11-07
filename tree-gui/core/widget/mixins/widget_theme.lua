@@ -148,58 +148,6 @@ function Widget:getThemeVariant()
     return self._theme_variant
 end
 
---- Resolves a style value. Priority:
---- 1. Widget override (only for the widget itself).
---- 2. Theme of the widget, then of each ancestor, looking up the type of THIS widget
----    (and its base types, e.g. Button -> Container -> Widget).
---- 3. Default theme.
---- @nodiscard
---- @param key string
---- @param ignore_override boolean?
---- @return any?
-function Widget:getStyleValue(key, ignore_override)
-    if not ignore_override then
-        local override_value = self._style_override[key] --- @type any
-        if override_value ~= nil then return override_value end
-    end
-
-    local chain = getStyleChain(self)
-    local type_name = self:getClassName() --- @cast type_name TreeGUI.Enums.ThemeType
-
-    local current = self --- @type TreeGUI.Widget?
-    while current do
-        if current._theme then
-            local value = nil
-
-            if self._theme_variant then
-                value = current._theme:getVariantStyleValue(type_name, self._theme_variant, key)
-                if value ~= nil then return value end
-            end
-
-            value = lookup(current._theme, chain, key)
-            if value ~= nil then return value end
-        end
-        current = current._parent
-    end
-
-    if self._tree then
-        local tree_theme = self._tree:getTheme()
-        if tree_theme then
-            local value = nil
-
-            if self._theme_variant then
-                value = tree_theme:getVariantStyleValue(type_name, self._theme_variant, key)
-                if value ~= nil then return value end
-            end
-
-            value = lookup(tree_theme, chain, key)
-            if value ~= nil then return value end
-        end
-    end
-
-    return lookup(DEFAULT_THEME, chain, key)
-end
-
 --#endregion
 
 

@@ -82,10 +82,10 @@ function Widget:_resolveFreeLayout(parent_width, parent_height)
             self:_applyAnchoredRect(r.x, r.y, r.w, r.h, parent_width, parent_height)
         end
 
-        local margin_left = self:getStyleValue("margin_left")
-        local margin_top = self:getStyleValue("margin_top")
-        local margin_right = self:getStyleValue("margin_right")
-        local margin_bottom = self:getStyleValue("margin_bottom")
+        local margin_left = self:_getStyleValue("margin_left")
+        local margin_top = self:_getStyleValue("margin_top")
+        local margin_right = self:_getStyleValue("margin_right")
+        local margin_bottom = self:_getStyleValue("margin_bottom")
 
         local area_width = math.max(0, parent_width - margin_left - margin_right)
         local area_height = math.max(0, parent_height - margin_top - margin_bottom)
@@ -591,10 +591,10 @@ end
 --- @protected
 --- @return number w, number h
 function Widget:_getOuterMinimumSize()
-    local margin_left = self:getStyleValue("margin_left")
-    local margin_top = self:getStyleValue("margin_top")
-    local margin_right = self:getStyleValue("margin_right")
-    local margin_bottom = self:getStyleValue("margin_bottom")
+    local margin_left = self:_getStyleValue("margin_left")
+    local margin_top = self:_getStyleValue("margin_top")
+    local margin_right = self:_getStyleValue("margin_right")
+    local margin_bottom = self:_getStyleValue("margin_bottom")
 
     return self._combined_min_width  + margin_left + margin_right,
            self._combined_min_height + margin_top  + margin_bottom

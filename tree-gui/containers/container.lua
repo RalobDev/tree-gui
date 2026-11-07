@@ -79,10 +79,10 @@ end
 function Container:_fitChildInRect(child, x, y, width, height)
     local _, align_h = Layout.parseFlags(child._size_flags_horizontal)
     local _, align_v = Layout.parseFlags(child._size_flags_vertical)
-    local margin_left = child:getStyleValue("margin_left")
-    local margin_top = child:getStyleValue("margin_top")
-    local margin_right = child:getStyleValue("margin_right")
-    local margin_bottom = child:getStyleValue("margin_bottom")
+    local margin_left = child:_getStyleValue("margin_left")
+    local margin_top = child:_getStyleValue("margin_top")
+    local margin_right = child:_getStyleValue("margin_right")
+    local margin_bottom = child:_getStyleValue("margin_bottom")
 
     local available_width = width - margin_left - margin_right
     local available_height = height - margin_top - margin_bottom
@@ -290,10 +290,10 @@ end
 --- @nodiscard
 --- @return number x, number y, number width, number height
 function Container:_getContentRect()
-    local padding_left = self:getStyleValue("padding_left")
-    local padding_top = self:getStyleValue("padding_top")
-    local padding_right = self:getStyleValue("padding_right")
-    local padding_bottom = self:getStyleValue("padding_bottom")
+    local padding_left = self:_getStyleValue("padding_left")
+    local padding_top = self:_getStyleValue("padding_top")
+    local padding_right = self:_getStyleValue("padding_right")
+    local padding_bottom = self:_getStyleValue("padding_bottom")
 
     return padding_left,
            padding_top,
@@ -320,10 +320,10 @@ end
 --- @nodiscard
 --- @return number min_width, number min_height
 function Container:_getContentMinimumDimensions()
-    local padding_left = self:getStyleValue("padding_left")
-    local padding_top = self:getStyleValue("padding_top")
-    local padding_right = self:getStyleValue("padding_right")
-    local padding_bottom = self:getStyleValue("padding_bottom")
+    local padding_left = self:_getStyleValue("padding_left")
+    local padding_top = self:_getStyleValue("padding_top")
+    local padding_right = self:_getStyleValue("padding_right")
+    local padding_bottom = self:_getStyleValue("padding_bottom")
 
     local width, height = self:_getChildrenMinimumDimensions()
     return width + padding_left + padding_right,

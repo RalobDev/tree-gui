@@ -56,7 +56,7 @@ function StackContainer:_sortChildren()
     if count == 0 then return end
 
     local vertical = self:_getOrientation() == Enums.Orientation.VERTICAL
-    local separation = self:getStyleValue("separation")
+    local separation = self:_getStyleValue("separation")
     local x, y, width, height = self:_getContentRect()
 
     local main_size = vertical and height or width
@@ -186,7 +186,7 @@ function StackContainer:_getChildrenMinimumDimensions()
     end
 
     if #children > 1 then
-        main = main + self:getStyleValue("separation") * (#children - 1)
+        main = main + self:_getStyleValue("separation") * (#children - 1)
     end
 
     if vertical then return cross, main end

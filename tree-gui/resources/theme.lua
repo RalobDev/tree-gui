@@ -101,7 +101,7 @@ end
 --#region Setters
 
 --- Sets (replaces) the style of a Widget type.
---- @param type_name TreeGUI.Theme.WidgetType
+--- @param type_name TreeGUI.Enums.ThemeType
 --- @param style TreeGUI.Theme.WidgetStyle
 function Theme:setStyle(type_name, style)
     self._data[type_name] = shallowCopy(style)
@@ -109,7 +109,7 @@ function Theme:setStyle(type_name, style)
 end
 
 --- Sets (replaces) the style of a variant of a Widget type.
---- @param type_name TreeGUI.Theme.WidgetType
+--- @param type_name TreeGUI.Enums.ThemeType
 --- @param variant_name string
 --- @param style TreeGUI.Theme.WidgetStyle
 function Theme:setVariantStyle(type_name, variant_name, style)
@@ -119,7 +119,7 @@ function Theme:setVariantStyle(type_name, variant_name, style)
 end
 
 --- Sets (replaces) the value of a Widget style. Creates the style of the type if it doesn't exist.
---- @param type_name TreeGUI.Theme.WidgetType
+--- @param type_name TreeGUI.Enums.ThemeType
 --- @param key string
 --- @param value any
 function Theme:setStyleValue(type_name, key, value)
@@ -137,7 +137,7 @@ end
 
 --- Sets (replaces) the value of a variant of a Widget style.
 --- Creates the style of the type if it doesn't exist.
---- @param type_name TreeGUI.Theme.WidgetType
+--- @param type_name TreeGUI.Enums.ThemeType
 --- @param variant_name string
 --- @param key string
 --- @param value any
@@ -159,7 +159,7 @@ end
 
 --- Returns the value of a Widget style. `false` is a valid value; only absence returns `nil`.
 --- @nodiscard
---- @param type_name TreeGUI.Theme.WidgetType
+--- @param type_name TreeGUI.Enums.ThemeType
 --- @param key string
 --- @return any value
 function Theme:getStyleValue(type_name, key)
@@ -170,7 +170,7 @@ end
 
 --- Returns the value of variant of a Widget style. `false` is a valid value; only absence returns `nil`.
 --- @nodiscard
---- @param type_name TreeGUI.Theme.WidgetType
+--- @param type_name TreeGUI.Enums.ThemeType
 --- @param variant_name string
 --- @param key string
 --- @return any value

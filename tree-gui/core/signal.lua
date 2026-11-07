@@ -1,4 +1,4 @@
-local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 3) .. "$") --- @type string
+local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 2) .. "$") --- @type string
 
 local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 

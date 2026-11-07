@@ -6,6 +6,7 @@ Enums.ClassName = {
     Class = "Class",
     ColorRect = "ColorRect",
     Container = "Container",
+    Signal = "Signal",
     StackContainer = "StackContainer",
     StackContainerH = "StackContainerH",
     StackContainerV = "StackContainerV",

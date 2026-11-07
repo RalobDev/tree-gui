@@ -1,3 +1,7 @@
+local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 4) .. "$") --- @type string
+
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
+
 --- @class TreeGUI.Widget
 local Widget = {}
 
@@ -72,7 +76,7 @@ end
 --- @protected
 --- @param child TreeGUI.Widget
 function Widget:_insertChild(child)
-    if type(child) ~= "table" or not (child.is and child:is("Widget")) then
+    if type(child) ~= "table" or not (child.is and child:is(Enums.ClassName.Widget)) then
         error(string.format('Cannot add "%s" (%s) as child, expected widget.', child, type(child)))
     elseif child._is_destroyed then
         error(string.format("Cannot add a destroyed child (%s).", child))

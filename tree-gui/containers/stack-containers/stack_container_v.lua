@@ -1,6 +1,7 @@
 local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 3) .. "$") --- @type string
 
 local StackContainer = require(ROOT .. ".containers.stack-containers.stack_container") --- @type TreeGUI.StackContainer
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 
 --- Container that arranges its children ONLY in a single vertical line.
 --- @class TreeGUI.StackContainerV: TreeGUI.StackContainer
@@ -24,9 +25,9 @@ end
 --#region Protected
 
 --- @protected
---- @return TreeGUI.Orientation
+--- @return TreeGUI.Enums.Orientation
 function StackContainerV:_getOrientation()
-    return "VERTICAL"
+    return Enums.Orientation.VERTICAL
 end
 
 --#endregion

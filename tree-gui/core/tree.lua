@@ -5,6 +5,7 @@ local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 2) .. "$") --- @type 
 local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 local Render = require(ROOT .. ".tools.render_tool") --- @type TreeGUI.Render
 local DebugDraw = require(ROOT .. ".tools.debug_tool") --- @type TreeGUI.DebugDraw
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 
 --- Responsible for handling input, updating, managing states and rendering Widget's.
 --- Without a Tree, a Widget becomes a ghost object.
@@ -54,8 +55,8 @@ local function bubbleMouse(target, handler, x, y, ...)
     local w = target
     while w do
         local filter = w._mouse_filter
-        if filter ~= "IGNORE" then
-            if w:_receiveMouse(handler, x, y, ...) or filter == "STOP" then
+        if filter ~= Enums.MouseFilter.IGNORE then
+            if w:_receiveMouse(handler, x, y, ...) or filter == Enums.MouseFilter.STOP then
                 return true
             end
         end
@@ -69,7 +70,7 @@ end
 --- @param list TreeGUI.Widget[]
 local function collectFocusable(widget, list)
     if not widget._visible or widget._opacity <= 0 then return end
-    if widget._focus_mode == "ALL" then list[#list+1] = widget end
+    if widget._focus_mode == Enums.FocusMode.ALL then list[#list+1] = widget end
     for _, child in ipairs(widget._children) do
         collectFocusable(child, list)
     end
@@ -78,7 +79,7 @@ end
 --- Automatic directional focus: nearest widget in the given direction (by center).
 --- @param owner TreeGUI.Widget
 --- @param list TreeGUI.Widget[]
---- @param side TreeGUI.FocusSide
+--- @param side TreeGUI.Enums.FocusSide
 local function findSpatial(owner, list, side)
     local ox, oy = owner:getGlobalPosition()
     ox, oy = ox + owner._width / 2, oy + owner._height / 2
@@ -90,9 +91,9 @@ local function findSpatial(owner, list, side)
             local dx, dy = cx + w._width / 2 - ox, cy + w._height / 2 - oy
 
             local primary, secondary
-            if side == "left" then primary, secondary = -dx, dy
-            elseif side == "right" then primary, secondary = dx, dy
-            elseif side == "top" then primary, secondary = -dy, dx
+            if side == Enums.FocusSide.left then primary, secondary = -dx, dy
+            elseif side == Enums.FocusSide.right then primary, secondary = dx, dy
+            elseif side == Enums.FocusSide.top then primary, secondary = -dy, dx
             else primary, secondary = dy, dx end
 
             if primary > 0 then
@@ -249,7 +250,7 @@ end
 --- Adds child to Tree.
 --- @param child TreeGUI.Widget
 function Tree:addChild(child)
-    if type(child) ~= "table" or not (child.is and child:is("Widget")) then
+    if type(child) ~= "table" or not (child.is and child:is(Enums.ClassName.Widget)) then
         error(string.format('Cannot add "%s" (%s) as child, expected widget.', child, type(child)))
     elseif child._is_destroyed then
         error(string.format("Cannot add a destroyed child (%s).", child))
@@ -289,7 +290,7 @@ function Tree:queueUpdateTheme()
 end
 
 --- Moves focus following explicit neighbors, falling back to automatic navigation.
---- @param side TreeGUI.FocusSide
+--- @param side TreeGUI.Enums.FocusSide
 --- @return boolean moved
 function Tree:navigateFocus(side)
     local owner = self._focus_owner
@@ -301,14 +302,14 @@ function Tree:navigateFocus(side)
         if #list == 0 then return false end
 
         if not owner then
-            target = (side == "previous") and list[#list] or list[1]
-        elseif side == "next" or side == "previous" then
+            target = (side == Enums.FocusSide.previous) and list[#list] or list[1]
+        elseif side == Enums.FocusSide.next or side == Enums.FocusSide.previous then
             local index
             for i, w in ipairs(list) do
                 if w == owner then index = i break end
             end
             if index then
-                local step = side == "next" and 1 or -1
+                local step = side == Enums.FocusSide.next and 1 or -1
                 target = list[(index - 1 + step) % #list + 1] -- wraps around
             else
                 target = list[1]
@@ -325,12 +326,12 @@ end
 
 --- @return boolean moved
 function Tree:focusNext()
-    return self:navigateFocus("next")
+    return self:navigateFocus(Enums.FocusSide.next)
 end
 
 --- @return boolean moved
 function Tree:focusPrevious()
-    return self:navigateFocus("previous")
+    return self:navigateFocus(Enums.FocusSide.previous)
 end
 
 --- @param key love.KeyConstant
@@ -343,7 +344,7 @@ function Tree:keypressed(key, scancode, isrepeat)
 
     local side = NAV_KEYS[key]
     if key == "tab" then
-        side = love.keyboard.isDown("lshift", "rshift") and "previous" or "next"
+        side = love.keyboard.isDown("lshift", "rshift") and Enums.FocusSide.previous or Enums.FocusSide.next
     end
     if side then return self:navigateFocus(side) end
 
@@ -378,13 +379,13 @@ function Tree:mousepressed(x, y, button, istouch, presses)
 
     while w do
         local filter = w._mouse_filter
-        if filter ~= "IGNORE" then
+        if filter ~= Enums.MouseFilter.IGNORE then
             -- First widget in the chain that accepts click-focus gets it (before its handler runs).
-            if not focus_taken and w._focus_mode ~= "NONE" then
+            if not focus_taken and w._focus_mode ~= Enums.FocusMode.NONE then
                 self:_setFocusOwner(w)
                 focus_taken = true
             end
-            if w:_receiveMouse("_onMousePressed", x, y, button, istouch, presses) or filter == "STOP" then
+            if w:_receiveMouse("_onMousePressed", x, y, button, istouch, presses) or filter == Enums.MouseFilter.STOP then
                 consumed_by = w
                 break
             end

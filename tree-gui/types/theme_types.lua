@@ -1,13 +1,6 @@
 --- RGBA color with components in the 0-1 range.
 --- @alias TreeGUI.Color [number, number, number, number?]
 
---- @alias TreeGUI.Theme.WidgetType
---- | "Container"
---- | "StackContainer"
---- | "StackContainerH"
---- | "StackContainerV"
---- | "Widget"
-
 --- Theme data: one optional style table per Widget type name.
 --- @class TreeGUI.Theme.Data
 --- @field Container TreeGUI.Theme.ContainerStyle?

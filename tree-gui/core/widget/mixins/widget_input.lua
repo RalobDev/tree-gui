@@ -1,5 +1,9 @@
 --- @diagnostic disable: invisible
 
+local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 4) .. "$") --- @type string
+
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
+
 --- @class TreeGUI.Widget
 local Widget = {}
 
@@ -29,7 +33,7 @@ function Widget:releaseMouse()
 end
 
 function Widget:grabFocus()
-    if self._tree and self._focus_mode ~= "NONE" and self:isVisibleInTree() then
+    if self._tree and self._focus_mode ~= Enums.FocusMode.NONE and self:isVisibleInTree() then
         self._tree:setFocusOwner(self)
     end
 end
@@ -142,7 +146,7 @@ function Widget:_pickInput(x, y)
         if hit then return hit end
     end
 
-    if inside and self._mouse_filter ~= "IGNORE" then
+    if inside and self._mouse_filter ~= Enums.MouseFilter.IGNORE then
         return self
     end
     return nil
@@ -177,19 +181,19 @@ end
 
 --#region Setters
 
---- @param mode TreeGUI.FocusMode
+--- @param mode TreeGUI.Enums.FocusMode
 function Widget:setFocusMode(mode)
-    if mode == "NONE" then self:releaseFocus() end
+    if mode == Enums.FocusMode.NONE then self:releaseFocus() end
     self._focus_mode = mode
 end
 
---- @param side TreeGUI.FocusSide
+--- @param side TreeGUI.Enums.FocusSide
 --- @param widget TreeGUI.Widget?
 function Widget:setFocusNeighbor(side, widget)
     self._focus_neighbors[side] = widget
 end
 
---- @param filter TreeGUI.MouseFilter
+--- @param filter TreeGUI.Enums.MouseFilter
 function Widget:setMouseFilter(filter)
     self._mouse_filter = filter
 end
@@ -219,20 +223,20 @@ function Widget:isMouseCaptured()
 end
 
 --- @nodiscard
---- @return TreeGUI.FocusMode mode
+--- @return TreeGUI.Enums.FocusMode mode
 function Widget:getFocusMode()
     return self._focus_mode
 end
 
 --- @nodiscard
---- @param side TreeGUI.FocusSide
+--- @param side TreeGUI.Enums.FocusSide
 --- @return TreeGUI.Widget? widget
 function Widget:getFocusNeighbor(side)
     return self._focus_neighbors[side]
 end
 
 --- @nodiscard
---- @return TreeGUI.MouseFilter filter
+--- @return TreeGUI.Enums.MouseFilter filter
 function Widget:getMouseFilter()
     return self._mouse_filter
 end
@@ -245,7 +249,7 @@ end
 --- Returns the explicit neighbor for `side` if it is valid and keyboard-focusable.
 --- @private
 --- @nodiscard
---- @param side TreeGUI.FocusSide
+--- @param side TreeGUI.Enums.FocusSide
 --- @return TreeGUI.Widget?
 function Widget:_getFocusNeighbor(side)
     local neighbor = self._focus_neighbors[side]
@@ -253,7 +257,7 @@ function Widget:_getFocusNeighbor(side)
         neighbor
         and not neighbor._is_destroyed
         and neighbor._tree == self._tree
-        and neighbor._focus_mode == "ALL"
+        and neighbor._focus_mode == Enums.FocusMode.ALL
         and neighbor:isVisibleInTree()
     then
         return neighbor

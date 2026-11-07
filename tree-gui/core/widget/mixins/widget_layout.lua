@@ -1,6 +1,7 @@
 local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 4) .. "$") --- @type string
 
 local Layout = require(ROOT .. ".tools.layout_tool") --- @type TreeGUI.Layout
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 
 --- @class TreeGUI.Widget
 local Widget = {}
@@ -20,17 +21,17 @@ local WIDE_SIDE = { BEGIN = 0, CENTER = 0.5, END = 1 }
 --- @nodiscard
 --- @param anchor number
 --- @param size number
---- @return number, number, number, number, TreeGUI.GrowDirection
+--- @return number, number, number, number, TreeGUI.Enums.GrowDirection
 local function pointAxis(anchor, size)
-    local grow = anchor == 0 and "END" or (anchor == 1 and "BEGIN" or "BOTH")
+    local grow = anchor == 0 and "END" or (anchor == 1 and Enums.GrowDirection.BEGIN or Enums.GrowDirection.BOTH)
     return anchor, anchor, -size * anchor, size * (1 - anchor), grow
 end
 
 --- Stretched axis: occupies 100% of the parent.
 --- @nodiscard
---- @return number, number, number, number, TreeGUI.GrowDirection
+--- @return number, number, number, number, TreeGUI.Enums.GrowDirection
 local function wideAxis()
-    return 0, 1, 0, 0, "END"
+    return 0, 1, 0, 0, Enums.GrowDirection.END
 end
 
 --#endregion
@@ -74,7 +75,7 @@ end
 function Widget:_resolveFreeLayout(parent_width, parent_height)
     local min_width, min_height = self._combined_min_width, self._combined_min_height
 
-    if self._layout_mode == "ANCHOR" then
+    if self._layout_mode == Enums.LayoutMode.ANCHOR then
         local r = self._pending_rect
         if r then
             self._pending_rect = nil
@@ -133,7 +134,7 @@ end
 --- Sets the layout mode of the Widget. In `POSITION` mode, it positions itself freely according to your
 --- position; In `ANCHOR` mode, it positions itself according to its anchors and offsets.
 --- NOTE: layout mode is ignored when the Widget is a child of a Container.
---- @param layout_mode TreeGUI.LayoutMode
+--- @param layout_mode TreeGUI.Enums.LayoutMode
 function Widget:setLayoutMode(layout_mode)
     if layout_mode ~= self._layout_mode then
         self._layout_mode = layout_mode
@@ -144,7 +145,7 @@ end
 --- Applies a preset of anchors and offsets.
 --- Without `width/height`, use the Widget's current dimensions as the desired size.
 --- If this size is smaller than the minimum, the Widget grows in the direction of the preset.
---- @param preset TreeGUI.AnchorPreset
+--- @param preset TreeGUI.Enums.AnchorPreset
 --- @param width number?
 --- @param height number?
 function Widget:setAnchorPreset(preset, width, height)
@@ -156,17 +157,17 @@ function Widget:setAnchorPreset(preset, width, height)
     if point then
         anchor_l, anchor_r, off_l, off_r, grow_h = pointAxis(point[1], w)
         anchor_t, anchor_b, off_t, off_b, grow_v = pointAxis(point[2], h)
-    elseif preset == "FULL_RECT" then
+    elseif preset == Enums.AnchorPreset.FULL_RECT then
         anchor_l, anchor_r, off_l, off_r, grow_h = wideAxis()
         anchor_t, anchor_b, off_t, off_b, grow_v = wideAxis()
     else
         local kind, side = tostring(preset):match("^(%u+)_WIDE_(%u+)$")
         local anchor = WIDE_SIDE[side]
-        if not anchor or (kind ~= "HORIZONTAL" and kind ~= "VERTICAL") then
+        if not anchor or (kind ~= Enums.Orientation.HORIZONTAL and kind ~= Enums.Orientation.VERTICAL) then
             error(string.format('AnchorPreset inválido: "%s".', tostring(preset)))
         end
 
-        if kind == "HORIZONTAL" then
+        if kind == Enums.Orientation.HORIZONTAL then
             anchor_l, anchor_r, off_l, off_r, grow_h = wideAxis()
             anchor_t, anchor_b, off_t, off_b, grow_v = pointAxis(anchor, h)
         else
@@ -176,7 +177,7 @@ function Widget:setAnchorPreset(preset, width, height)
         end
     end
 
-    self._layout_mode = "ANCHOR"
+    self._layout_mode = Enums.LayoutMode.ANCHOR
     self._anchor_left, self._anchor_right, self._offset_left, self._offset_right = anchor_l, anchor_r, off_l, off_r
     self._grow_direction_horizontal = grow_h
     self._anchor_top, self._anchor_bottom, self._offset_top, self._offset_bottom = anchor_t, anchor_b, off_t, off_b
@@ -355,7 +356,7 @@ function Widget:setMarginBottom(margin)
 end
 
 --- Sets the size flags horizontal of the Widget.
---- @param size_flags TreeGUI.SizeFlags
+--- @param size_flags TreeGUI.Enums.SizeFlags
 function Widget:setSizeFlagsHorizontal(size_flags)
     if size_flags ~= self._size_flags_horizontal then
         self._size_flags_horizontal = size_flags
@@ -364,7 +365,7 @@ function Widget:setSizeFlagsHorizontal(size_flags)
 end
 
 --- Sets the size flags vertical of the Widget.
---- @param size_flags TreeGUI.SizeFlags
+--- @param size_flags TreeGUI.Enums.SizeFlags
 function Widget:setSizeFlagsVertical(size_flags)
     if size_flags ~= self._size_flags_vertical then
         self._size_flags_vertical = size_flags
@@ -382,7 +383,7 @@ function Widget:setStretchRatio(stretch_ratio)
 end
 
 --- Sets the grow direction horizontal of the Widget.
---- @param grow_direction TreeGUI.GrowDirection
+--- @param grow_direction TreeGUI.Enums.GrowDirection
 function Widget:setGrowDirectionHorizontal(grow_direction)
     if grow_direction ~= self._grow_direction_horizontal then
         self._grow_direction_horizontal = grow_direction
@@ -391,7 +392,7 @@ function Widget:setGrowDirectionHorizontal(grow_direction)
 end
 
 --- Sets the grow direction vertical of the Widget.
---- @param grow_direction TreeGUI.GrowDirection
+--- @param grow_direction TreeGUI.Enums.GrowDirection
 function Widget:setGrowDirectionVertical(grow_direction)
     if grow_direction ~= self._grow_direction_vertical then
         self._grow_direction_vertical = grow_direction
@@ -407,7 +408,7 @@ end
 --- Returns the layout mode of the Widget. Basically it is the way the Widget is positioned in relation to the parent.
 --- NOTE: layout mode has no influence when it is a child of a Container.
 --- @nodiscard
---- @return TreeGUI.LayoutMode layout_mode
+--- @return TreeGUI.Enums.LayoutMode layout_mode
 function Widget:getLayoutMode(layout_mode)
     return self._layout_mode
 end
@@ -449,14 +450,14 @@ end
 
 --- Gets the size flags horizontal of the Widget.
 --- @nodiscard
---- @return TreeGUI.SizeFlags size_flags
+--- @return TreeGUI.Enums.SizeFlags size_flags
 function Widget:getSizeFlagsHorizontal()
     return self._size_flags_horizontal
 end
 
 --- Gets the size flags vertical of the Widget.
 --- @nodiscard
---- @return TreeGUI.SizeFlags size_flags
+--- @return TreeGUI.Enums.SizeFlags size_flags
 function Widget:getSizeFlagsVertical()
     return self._size_flags_vertical
 end
@@ -540,14 +541,14 @@ end
 
 --- Gets the grow direction horizontal of the Widget.
 --- @nodiscard
---- @return TreeGUI.GrowDirection grow_direction
+--- @return TreeGUI.Enums.GrowDirection grow_direction
 function Widget:getGrowDirectionHorizontal()
     return self._grow_direction_horizontal
 end
 
 --- Gets the grow direction vertical of the Widget.
 --- @nodiscard
---- @return TreeGUI.GrowDirection grow_direction
+--- @return TreeGUI.Enums.GrowDirection grow_direction
 function Widget:getGrowDirectionVertical()
     return self._grow_direction_vertical
 end

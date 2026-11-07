@@ -1,15 +1,19 @@
+local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 2) .. "$") --- @type string
+
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
+
 --- @class TreeGUI.Layout
 local Layout = {}
 
 local FLAGS = {
-    FILL                 = { expand = false, align = "FILL"   },
-    SHRINK_BEGIN         = { expand = false, align = "BEGIN"  },
-    SHRINK_CENTER        = { expand = false, align = "CENTER" },
-    SHRINK_END           = { expand = false, align = "END"    },
-    EXPAND_FILL          = { expand = true,  align = "FILL"   },
-    EXPAND_SHRINK_BEGIN  = { expand = true,  align = "BEGIN"  },
-    EXPAND_SHRINK_CENTER = { expand = true,  align = "CENTER" },
-    EXPAND_SHRINK_END    = { expand = true,  align = "END"    },
+    FILL                 = { expand = false, align = Enums.SizeFlagsAlignment.FILL   },
+    SHRINK_BEGIN         = { expand = false, align = Enums.SizeFlagsAlignment.BEGIN  },
+    SHRINK_CENTER        = { expand = false, align = Enums.SizeFlagsAlignment.CENTER },
+    SHRINK_END           = { expand = false, align = Enums.SizeFlagsAlignment.END    },
+    EXPAND_FILL          = { expand = true,  align = Enums.SizeFlagsAlignment.FILL   },
+    EXPAND_SHRINK_BEGIN  = { expand = true,  align = Enums.SizeFlagsAlignment.BEGIN  },
+    EXPAND_SHRINK_CENTER = { expand = true,  align = Enums.SizeFlagsAlignment.CENTER },
+    EXPAND_SHRINK_END    = { expand = true,  align = Enums.SizeFlagsAlignment.END    },
 }
 
 
@@ -17,9 +21,9 @@ local FLAGS = {
 
 --- Returns flags data.
 --- @nodiscard
---- @param flags TreeGUI.SizeFlags
+--- @param flags TreeGUI.Enums.SizeFlags
 --- @return boolean expand
---- @return TreeGUI.SizeFlagsAlignment align
+--- @return TreeGUI.Enums.SizeFlagsAlignment align
 function Layout.parseFlags(flags)
     local data = FLAGS[flags]
     if not data then error(string.format("Invalid SizeFlags: %s.", tostring(flags))) end
@@ -28,21 +32,21 @@ end
 
 --- Positions a child within the available space of an axis.
 --- @nodiscard
---- @param align TreeGUI.SizeFlagsAlignment
+--- @param align TreeGUI.Enums.SizeFlagsAlignment
 --- @param available number
 --- @param min number
 --- @return number size, number offset
 function Layout.align(align, available, min)
-    if align == "FILL" then return math.max(available, min), 0 end
-    if align == "BEGIN" then return min, 0 end
-    if align == "CENTER" then return min, math.floor((available - min) / 2) end
+    if align == Enums.SizeFlagsAlignment.FILL then return math.max(available, min), 0 end
+    if align == Enums.SizeFlagsAlignment.BEGIN then return min, 0 end
+    if align == Enums.SizeFlagsAlignment.CENTER then return min, math.floor((available - min) / 2) end
     return min, available - min -- END
 end
 
 --- Offset to apply when `size` exceeds the `available` space, following the grow direction.
 --- Returns 0 when there is no overflow.
 --- @nodiscard
---- @param grow TreeGUI.GrowDirection
+--- @param grow TreeGUI.Enums.GrowDirection
 --- @param available number
 --- @param size number
 --- @return number offset
@@ -50,8 +54,8 @@ function Layout.growOffset(grow, available, size)
     local overflow = size - available
     if overflow <= 0 then return 0 end
 
-    if grow == "BEGIN" then return -overflow end
-    if grow == "BOTH" then return -math.floor(overflow / 2) end
+    if grow == Enums.GrowDirection.BEGIN then return -overflow end
+    if grow == Enums.GrowDirection.BOTH then return -math.floor(overflow / 2) end
     return 0 -- END
 end
 
@@ -63,7 +67,7 @@ end
 --- @param offset_begin number
 --- @param offset_end number
 --- @param min number
---- @param grow TreeGUI.GrowDirection
+--- @param grow TreeGUI.Enums.GrowDirection
 --- @return number position, number size
 function Layout.anchorAxis(anchor_begin, anchor_end, parent_size, offset_begin, offset_end, min, grow)
     local begin_position = parent_size * anchor_begin + offset_begin
@@ -72,9 +76,9 @@ function Layout.anchorAxis(anchor_begin, anchor_end, parent_size, offset_begin, 
 
     if size < min then
         local diff = min - size
-        if grow == "BEGIN" then
+        if grow == Enums.GrowDirection.BEGIN then
             begin_position = begin_position - diff
-        elseif grow == "BOTH" then
+        elseif grow == Enums.GrowDirection.BOTH then
             begin_position = begin_position - diff / 2
         end -- END
         size = min

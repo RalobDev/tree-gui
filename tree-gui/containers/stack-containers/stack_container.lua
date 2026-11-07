@@ -2,10 +2,11 @@ local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 3) .. "$") --- @type 
 
 local Container = require(ROOT .. ".containers.container") --- @type TreeGUI.Container
 local Layout = require(ROOT .. ".tools.layout_tool") --- @type TreeGUI.Layout
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 
 --- Container that arranges its children in a single line (horizontal or vertical).
 --- @class TreeGUI.StackContainer: TreeGUI.Container
---- @field private _orientation TreeGUI.Orientation Axis of the line. Ignored by StackContainerH/V, which fix it via _getOrientation().
+--- @field private _orientation TreeGUI.Enums.Orientation Axis of the line. Ignored by StackContainerH/V, which fix it via _getOrientation().
 --- @field protected _style_override TreeGUI.Theme.StackContainerStyle Overrides for margins, paddings and separation.
 local StackContainer = Container:extend("StackContainer")
 
@@ -13,7 +14,7 @@ local StackContainer = Container:extend("StackContainer")
 --#region Definitions
 
 --- @class TreeGUI.StackContainer.Props: TreeGUI.Container.Props
---- @field orientation TreeGUI.Orientation?
+--- @field orientation TreeGUI.Enums.Orientation?
 --- @field separation number?
 
 --#endregion
@@ -30,7 +31,7 @@ local StackContainer = Container:extend("StackContainer")
 function StackContainer:new(props)
     local obj = Container.new(self, props) --- @cast obj TreeGUI.StackContainer
 
-    obj._orientation = obj._orientation or "VERTICAL"
+    obj._orientation = obj._orientation or Enums.Orientation.VERTICAL
 
     return obj
 end
@@ -54,7 +55,7 @@ function StackContainer:_sortChildren()
     local count = #children
     if count == 0 then return end
 
-    local vertical = self:_getOrientation() == "VERTICAL"
+    local vertical = self:_getOrientation() == Enums.Orientation.VERTICAL
     local separation = self:getStyleValue("separation")
     local x, y, width, height = self:_getContentRect()
 
@@ -108,9 +109,9 @@ end
 --#region Setters
 
 --- Sets the orientation of the StackContainer.
---- @param orientation TreeGUI.Orientation
+--- @param orientation TreeGUI.Enums.Orientation
 function StackContainer:setOrientation(orientation)
-    if orientation ~= "HORIZONTAL" and orientation ~= "VERTICAL" then
+    if orientation ~= Enums.Orientation.HORIZONTAL and orientation ~= Enums.Orientation.VERTICAL then
         error(string.format('Invalid orientation: "%s".', tostring(orientation)))
     end
 
@@ -138,7 +139,7 @@ end
 
 --- Returns the orientation of the StackContainer.
 --- @nodiscard
---- @return TreeGUI.Orientation orientation
+--- @return TreeGUI.Enums.Orientation orientation
 function StackContainer:getOrientation()
     return self:_getOrientation()
 end
@@ -158,7 +159,7 @@ end
 --- Returns the orientation used by the layout. StackContainerH/StackContainerV override this with a constant.
 --- @protected
 --- @nodiscard
---- @return TreeGUI.Orientation orientation
+--- @return TreeGUI.Enums.Orientation orientation
 function StackContainer:_getOrientation()
     return self._orientation
 end
@@ -167,7 +168,7 @@ end
 --- @nodiscard
 --- @return number width, number height
 function StackContainer:_getChildrenMinimumDimensions()
-    local vertical = self:_getOrientation() == "VERTICAL"
+    local vertical = self:_getOrientation() == Enums.Orientation.VERTICAL
     local children = self:_getManagedChildren()
 
     local main, cross = 0, 0

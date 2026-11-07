@@ -1,6 +1,7 @@
 local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 3) .. "$") --- @type string
 
 local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 
 --- Base class for all GUI elements.
 --- @class TreeGUI.Widget: TreeGUI.Class
@@ -17,9 +18,9 @@ local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 --- @field protected _height number
 --- @field protected _min_width number User-defined minimum width.
 --- @field protected _min_height number User-defined minimum height.
---- @field private _layout_mode TreeGUI.LayoutMode Ignored when the Widget is a child of a Container.
---- @field protected _size_flags_horizontal TreeGUI.SizeFlags Only used by Containers.
---- @field protected _size_flags_vertical TreeGUI.SizeFlags Only used by Containers.
+--- @field private _layout_mode TreeGUI.Enums.LayoutMode Ignored when the Widget is a child of a Container.
+--- @field protected _size_flags_horizontal TreeGUI.Enums.SizeFlags Only used by Containers.
+--- @field protected _size_flags_vertical TreeGUI.Enums.SizeFlags Only used by Containers.
 --- @field protected _stretch_ratio number Share of the free space among expanding siblings (Containers only).
 --- @field protected _combined_min_width number Minimum width after pass 1: max(_min_width, content), without margins.
 --- @field protected _combined_min_height number Minimum height after pass 1: max(_min_height, content), without margins.
@@ -31,19 +32,19 @@ local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 --- @field protected _offset_top number
 --- @field protected _offset_right number
 --- @field protected _offset_bottom number
---- @field protected _grow_direction_horizontal TreeGUI.GrowDirection
---- @field protected _grow_direction_vertical TreeGUI.GrowDirection
+--- @field protected _grow_direction_horizontal TreeGUI.Enums.GrowDirection
+--- @field protected _grow_direction_vertical TreeGUI.Enums.GrowDirection
 --- @field private _pending_rect { x: number?, y: number?, w: number?, h: number? }? Rect requested in ANCHOR mode before the Widget was attached; applied on the first layout.
 --- @field protected _theme TreeGUI.Theme? Theme set directly on this Widget (`nil` = inherits).
 --- @field protected _theme_variant string?
 --- @field protected _style_override TreeGUI.Theme.WidgetStyle Values set directly on the Widget; they win over the Theme.
---- @field private _focus_mode TreeGUI.FocusMode
---- @field private _focus_neighbors table<TreeGUI.FocusSide, TreeGUI.Widget?>
---- @field private _mouse_filter TreeGUI.MouseFilter
+--- @field private _focus_mode TreeGUI.Enums.FocusMode
+--- @field private _focus_neighbors table<TreeGUI.Enums.FocusSide, TreeGUI.Widget?>
+--- @field private _mouse_filter TreeGUI.Enums.MouseFilter
 --- @field protected _visible boolean Hidden Widgets are not drawn, get no input and are ignored by Containers.
 --- @field private _opacity number Range 0-1.
 --- @field private _clip_content boolean
---- @field private _debug_mode TreeGUI.DebugMode
+--- @field private _debug_mode TreeGUI.Enums.DebugMode
 --- @field private _visual TreeGUI.Widget.VisualState Draw-only transform (offset, scale, rotation); never affects layout or input.
 local Widget = Class:extend("Widget")
 
@@ -68,15 +69,15 @@ local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
 --- @field height number?
 --- @field min_width number?
 --- @field min_height number?
---- @field layout_mode TreeGUI.LayoutMode?
---- @field size_flags_horizontal TreeGUI.SizeFlags?
---- @field size_flags_vertical TreeGUI.SizeFlags?
+--- @field layout_mode TreeGUI.Enums.LayoutMode?
+--- @field size_flags_horizontal TreeGUI.Enums.SizeFlags?
+--- @field size_flags_vertical TreeGUI.Enums.SizeFlags?
 --- @field stretch_ratio number?
 --- @field margin_left number?
 --- @field margin_top number?
 --- @field margin_right number?
 --- @field margin_bottom number?
---- @field anchor_preset TreeGUI.AnchorPreset?
+--- @field anchor_preset TreeGUI.Enums.AnchorPreset?
 --- @field anchor_left number?
 --- @field anchor_top number?
 --- @field anchor_right number?
@@ -85,13 +86,13 @@ local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
 --- @field offset_top number?
 --- @field offset_right number?
 --- @field offset_bottom number?
---- @field grow_direction_horizontal TreeGUI.GrowDirection?
---- @field grow_direction_vertical TreeGUI.GrowDirection?
+--- @field grow_direction_horizontal TreeGUI.Enums.GrowDirection?
+--- @field grow_direction_vertical TreeGUI.Enums.GrowDirection?
 --- @field theme TreeGUI.Theme?
 --- @field theme_variant string?
---- @field focus_mode TreeGUI.FocusMode?
---- @field focus_neighbors table<TreeGUI.FocusSide, TreeGUI.Widget>?
---- @field mouse_filter TreeGUI.MouseFilter?
+--- @field focus_mode TreeGUI.Enums.FocusMode?
+--- @field focus_neighbors table<TreeGUI.Enums.FocusSide, TreeGUI.Widget>?
+--- @field mouse_filter TreeGUI.Enums.MouseFilter?
 --- @field visible boolean?
 --- @field opacity number? (number in the range 0-1)
 --- @field clip_content boolean?
@@ -102,7 +103,7 @@ local NAV_KEYS = { left = "left", up = "top", right = "right", down = "bottom" }
 --- @field visual_rotation number?
 --- @field visual_pivot_x number?
 --- @field visual_pivot_y number?
---- @field debug_mode TreeGUI.DebugMode?
+--- @field debug_mode TreeGUI.Enums.DebugMode?
 
 --#endregion
 
@@ -128,8 +129,8 @@ function Widget:new(props)
     obj._height = 0
     obj._min_width = 0
     obj._min_height = 0
-    obj._size_flags_horizontal = "FILL"
-    obj._size_flags_vertical = "FILL"
+    obj._size_flags_horizontal = Enums.SizeFlags.FILL
+    obj._size_flags_vertical = Enums.SizeFlags.FILL
     obj._stretch_ratio = 1
     obj._combined_min_width = 0
     obj._combined_min_height = 0
@@ -141,16 +142,16 @@ function Widget:new(props)
     obj._offset_top = 0
     obj._offset_right = obj._offset_left + obj._width
     obj._offset_bottom = obj._offset_top + obj._height
-    obj._grow_direction_horizontal = "END"
-    obj._grow_direction_vertical = "END"
+    obj._grow_direction_horizontal = Enums.GrowDirection.END
+    obj._grow_direction_vertical = Enums.GrowDirection.END
     obj._is_internal = false
     obj._theme = nil
     obj._theme_variant = nil
     obj._style_override = {}
     obj._is_destroyed = false
     obj._is_queued_destroy = false
-    obj._layout_mode = "POSITION"
-    obj._debug_mode = "INHERITED"
+    obj._layout_mode = Enums.LayoutMode.POSITION
+    obj._debug_mode = Enums.DebugMode.INHERITED
     obj._pending_rect = nil
     obj._opacity = 1
     obj._visual = {
@@ -159,9 +160,9 @@ function Widget:new(props)
         rotation = 0,
         pivot_x = 0.5, pivot_y = 0.5
     }
-    obj._focus_mode = "NONE"
+    obj._focus_mode = Enums.FocusMode.NONE
     obj._focus_neighbors = {}
-    obj._mouse_filter = "STOP"
+    obj._mouse_filter = Enums.MouseFilter.STOP
     obj._clip_content = false
     obj._visible = true
 
@@ -266,7 +267,7 @@ end
 --#region Setters
 
 --- Enables or disables Widget debugging. If `debug_mode` is `INHERITED`, it follows the parent's debug.
---- @param debug_mode TreeGUI.DebugMode
+--- @param debug_mode TreeGUI.Enums.DebugMode
 function Widget:setDebugMode(debug_mode)
     self._debug_mode = debug_mode
 end
@@ -279,7 +280,7 @@ end
 --- Returns whether Widget debugging is enabled or not. If it is `INHERITED`,
 --- means that he follows his father's purification.
 --- @nodiscard
---- @return TreeGUI.DebugMode debug_mode
+--- @return TreeGUI.Enums.DebugMode debug_mode
 function Widget:getDebugMode()
     return self._debug_mode
 end

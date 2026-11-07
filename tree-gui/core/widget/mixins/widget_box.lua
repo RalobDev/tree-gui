@@ -1,3 +1,7 @@
+local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 4) .. "$") --- @type string
+
+local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
+
 --- @class TreeGUI.Widget
 local Widget = {}
 
@@ -68,7 +72,7 @@ end
 function Widget:_setRect(x, y, width, height)
     local changed = false
 
-    if self._layout_mode == "ANCHOR" then
+    if self._layout_mode == Enums.LayoutMode.ANCHOR then
         local pw, ph = self:_getReferenceSize()
         if pw then
             changed = self:_applyAnchoredRect(x, y, width, height, pw, ph)

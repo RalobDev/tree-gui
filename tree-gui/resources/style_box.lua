@@ -466,6 +466,231 @@ end
 
 
 --#region Getters
+
+--- Gets the color of the StyleBox.
+--- @nodiscard
+--- @return number r, number g, number b, number a
+function StyleBox:getColor()
+    local color = self._color
+    return color[1], color[2], color[3], color[4]
+end
+
+--- Gets whether the StyleBox center drawing is enabled.
+--- @nodiscard
+--- @return boolean enabled
+function StyleBox:getDrawCenter()
+    return self._draw_center
+end
+
+--- Gets the skew of the StyleBox.
+--- @nodiscard
+--- @return number x, number y
+function StyleBox:getSkew()
+    return self._skew_x, self._skew_y
+end
+
+--- Gets the X skew of the StyleBox.
+--- @nodiscard
+--- @return number x
+function StyleBox:getSkewX()
+    return self._skew_x
+end
+
+--- Gets the Y skew of the StyleBox.
+--- @nodiscard
+--- @return number y
+function StyleBox:getSkewY()
+    return self._skew_y
+end
+
+--- Gets the border width on all sides.
+--- @nodiscard
+--- @return number left_width, number top_width, number right_width, number bottom_width
+function StyleBox:getBordersWidth()
+    return self._border_width_left,
+           self._border_width_top,
+           self._border_width_right,
+           self._border_width_bottom
+end
+
+--- Gets the left border width.
+--- @nodiscard
+--- @return number width
+function StyleBox:getBorderWidthLeft()
+    return self._border_width_left
+end
+
+--- Gets the top border width.
+--- @nodiscard
+--- @return number width
+function StyleBox:getBorderWidthTop()
+    return self._border_width_top
+end
+
+--- Gets the right border width.
+--- @nodiscard
+--- @return number width
+function StyleBox:getBorderWidthRight()
+    return self._border_width_right
+end
+
+--- Gets the bottom border width.
+--- @nodiscard
+--- @return number width
+function StyleBox:getBorderWidthBottom()
+    return self._border_width_bottom
+end
+
+--- Gets the border color.
+--- @nodiscard
+--- @return number r, number g, number b, number a
+function StyleBox:getBorderColor()
+    local color = self._border_color
+    return color[1], color[2], color[3], color[4]
+end
+
+--- Gets whether border blending is on.
+--- If `true`, then there is a smooth transition from the border color to the StyleBox color.
+--- @nodiscard
+--- @return boolean enabled
+function StyleBox:getBorderBlend()
+    return self._border_blend
+end
+
+--- Gets the radius of all corners.
+--- @nodiscard
+--- @return number top_left_radius, number top_right_radius, number bottom_right_radius, number bottom_left_radius
+function StyleBox:getCornersRadius()
+    return self._corner_radius_top_left,
+           self._corner_radius_top_right,
+           self._corner_radius_bottom_right,
+           self._corner_radius_bottom_left
+end
+
+
+--- Gets the radius of the top left corner.
+--- @nodiscard
+--- @return number radius
+function StyleBox:getCornerRadiusTopLeft()
+    return self._corner_radius_top_left
+end
+
+--- Gets the radius of the top right corner.
+--- @nodiscard
+--- @return number radius
+function StyleBox:getCornerRadiusTopRight()
+    return self._corner_radius_top_right
+end
+
+--- Gets the radius of the bottom right corner.
+--- @nodiscard
+--- @return number radius
+function StyleBox:getCornerRadiusBottomRight()
+    return self._corner_radius_bottom_right
+end
+
+--- Gets the radius of the bottom left corner.
+--- @nodiscard
+--- @return number radius
+function StyleBox:getCornerRadiusBottomLeft()
+    return self._corner_radius_bottom_left
+end
+
+--- Gets the level of detail/corner segments.
+--- If `detail` is 0, the corners will be a perfectly circular arc.
+--- @return number detail
+function StyleBox:getCornerDetail()
+    return self._corner_detail
+end
+
+--- Gets how much the margins on all sides will expand.
+--- @nodiscard
+--- @return number left_width, number top_width, number right_width, number bottom_width
+function StyleBox:getExpandMargins()
+    return self._expand_margin_left,
+           self._expand_margin_top,
+           self._expand_margin_right,
+           self._expand_margin_bottom
+end
+
+--- Gets how much the left margin will expand.
+--- @nodiscard
+--- @return number width
+function StyleBox:getExpandMarginLeft()
+    return self._expand_margin_left
+end
+
+--- Gets how much the top margin will expand.
+--- @nodiscard
+--- @return number width
+function StyleBox:getExpandMarginTop()
+    return self._expand_margin_top
+end
+
+--- Gets how much the right margin will expand.
+--- @nodiscard
+--- @return number width
+function StyleBox:getExpandMarginRight()
+    return self._expand_margin_right
+end
+
+--- Gets how much the bottom margin will expand.
+--- @nodiscard
+--- @return number width
+function StyleBox:getExpandMarginBottom()
+    return self._expand_margin_bottom
+end
+
+--- Gets the shadow color.
+--- @nodiscard
+--- @return number r, number g, number b, number a
+function StyleBox:getShadowColor()
+    local color = self._shadow_color
+    return color[1], color[2], color[3], color[4]
+end
+
+--- Gets the shadow size.
+--- @nodiscard
+--- @return number size
+function StyleBox:getShadowSize()
+    return self._shadow_size
+end
+
+--- Gets the shadow offset.
+--- @nodiscard
+--- @return number x, number y
+function StyleBox:getShadowOffset()
+    return self._shadow_offset_x, self._shadow_offset_y
+end
+
+--- Gets the X shadow offset.
+--- @nodiscard
+--- @return number x
+function StyleBox:getShadowOffsetX()
+    return self._shadow_offset_x
+end
+
+--- Gets the Y shadow offset.
+--- @nodiscard
+--- @return number y
+function StyleBox:getShadowOffsetY()
+    return self._shadow_offset_y
+end
+
+--- If `enabled` is `true`, anti-aliasing will be applied to the StyleBox.
+--- @nodiscard
+--- @return boolean enabled
+function StyleBox:getAntiAliasing()
+    return self._anti_aliasing
+end
+
+--- Gets the anti-aliasing size.
+--- @nodiscard
+--- @return number size
+function StyleBox:getAntiAliasingSize()
+    return self._anti_aliasing_size
+end
+
 --#endregion
 
 

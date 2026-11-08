@@ -36,6 +36,7 @@
 --- @field padding_bottom number?
 
 --- @class TreeGUI.Theme.LabelStyle: TreeGUI.Theme.WidgetStyle
+--- @field text_settings TreeGUI.TextSettings?
 
 --- @class TreeGUI.Theme.PanelStyle: TreeGUI.Theme.WidgetStyle
 --- @field style_box TreeGUI.StyleBox?

@@ -3,6 +3,7 @@ local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 2) .. "$") --- @type 
 local Theme = require(ROOT .. ".resources.theme") --- @type TreeGUI.Theme
 local DefaultColor = require(ROOT .. ".resources.default_color") --- @type TreeGUI.DefaultColor
 local StyleBox = require(ROOT .. ".resources.style_box") --- @type TreeGUI.StyleBox
+local TextSettings = require(ROOT .. ".resources.text_settings") --- @type TreeGUI.TextSettings
 
 local COLOR = DefaultColor.dark
 
@@ -21,6 +22,7 @@ local theme = Theme:new {
             padding_right = 0,
             padding_bottom = 0
         },
+        Label = { text_settings = TextSettings:new() },
         Panel = {
             style_box = StyleBox:new {
                 lock = true,

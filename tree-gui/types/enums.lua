@@ -126,4 +126,19 @@ Enums.Orientation = {
     VERTICAL = "VERTICAL"
 }
 
+--- @enum TreeGUI.Enums.TextAlignmentHorizontal
+Enums.TextAlignmentHorizontal = {
+    BEGIN = "BEGIN",
+    CENTER = "CENTER",
+    END = "END",
+    JUSTIFY = "JUSTIFY"
+}
+
+--- @enum TreeGUI.Enums.TextAlignmentVertical
+Enums.TextAlignmentVertical = {
+    BEGIN = "BEGIN",
+    CENTER = "CENTER",
+    END = "END"
+}
+
 return Enums

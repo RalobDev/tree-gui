@@ -2,10 +2,28 @@ local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 3) .. "$") --- @type 
 
 local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
+local Signal = require(ROOT .. ".core.signal") --- @type TreeGUI.Signal
 
 --- Base class for all GUI elements.
 --- @class TreeGUI.Widget: TreeGUI.Class
---- @field protected _tree TreeGUI.Tree? Tree this Widget belongs to (`nil` while detached).
+--- @field on_tree_entered TreeGUI.Signal<fun(tree: TreeGUI.Tree)> Called when the Widget enters a Tree.
+--- @field on_tree_exited TreeGUI.Signal<fun(tree: TreeGUI.Tree)> Called when the Widget leaves a Tree.
+--- @field on_child_entered TreeGUI.Signal<fun(child: TreeGUI.Widget)> Called when a child enters the Widget.
+--- @field on_child_exited TreeGUI.Signal<fun(child: TreeGUI.Widget)> Called when a child leaves the Widget.
+--- @field on_layout_updated TreeGUI.Signal<fun()> Called when the Widget layout is updated.
+--- @field on_focus_changed TreeGUI.Signal<fun(is_focused: boolean)> Called when the Widget's focus changes.
+--- @field on_hovered_changed TreeGUI.Signal<fun(is_hovered: boolean)> Called when the mouse hovered over the Widget changes.
+--- @field on_queued_destroy TreeGUI.Signal<fun()> Called when the Widget enters the queue to be destroyed. It usually occurs a few frames before it is actually destroyed.
+--- @field on_destroyed TreeGUI.Signal<fun()> Called when the Widget is destroyed. CAUTION: Destroyed widgets are unstable as they should no longer exist.
+--- @field on_draw TreeGUI.Signal<fun()> Called when the Widget is drawn. (0, 0) is local to the Widget.
+--- @field on_visibilty_changed TreeGUI.Signal<fun(is_visible: boolean)> Called when the Widget's visibility changes.
+--- @field on_keypressed TreeGUI.Signal<fun(key: love.KeyConstant, scancode: love.Scancode, isrepeat: boolean)> Called when the Widget receives a key pressed.
+--- @field on_keyreleased TreeGUI.Signal<fun(key: love.KeyConstant, scancode: love.Scancode)> Called when the Widget receives a key released.
+--- @field on_mousepressed TreeGUI.Signal<fun(x: number, y: number, button: number, istouch: boolean, presses: number)> Called when the Widget receives a mouse pressed.
+--- @field on_mousereleased TreeGUI.Signal<fun(x: number, y: number, button: number, istouch: boolean, presses: number)> Called when the Widget receives a mouse released.
+--- @field on_mousemoved TreeGUI.Signal<fun(x: number, y: number, dx: number, dy: number, istouch: boolean)> Called when the Widget receives a mouse moved.
+--- @field on_wheelmoved TreeGUI.Signal<fun(x: number, y: number)> Called when the Widget receives a wheel moved.
+--- @field protected _tree TreeGUI.Tree? Widget this Widget belongs to (`nil` while detached).
 --- @field protected _parent TreeGUI.Widget?
 --- @field protected _children TreeGUI.Widget[] Includes internal children.
 --- @field protected _content_proxy TreeGUI.Widget Widget that receives the user's children (defaults to self).
@@ -118,6 +136,23 @@ Widget:implement(require(ROOT .. ".core.widget.mixins.widget_visual"))
 function Widget:new(props)
     local obj = Class.new(self) --- @class TreeGUI.Widget
 
+    obj.on_tree_entered = Signal:new()
+    obj.on_tree_exited = Signal:new()
+    obj.on_child_entered = Signal:new()
+    obj.on_child_exited = Signal:new()
+    obj.on_layout_updated = Signal:new()
+    obj.on_focus_changed = Signal:new()
+    obj.on_hovered_changed = Signal:new()
+    obj.on_queued_destroy = Signal:new()
+    obj.on_destroyed = Signal:new()
+    obj.on_draw = Signal:new()
+    obj.on_visibilty_changed = Signal:new()
+    obj.on_keypressed = Signal:new()
+    obj.on_keyreleased = Signal:new()
+    obj.on_mousepressed = Signal:new()
+    obj.on_mousereleased = Signal:new()
+    obj.on_mousemoved = Signal:new()
+    obj.on_wheelmoved = Signal:new()
     obj._tree = nil
     obj._parent = nil
     obj._children = {}
@@ -227,7 +262,22 @@ end
 
 --- Adds the Widget to the destruction queue, automatically removing it on the next Tree update.
 function Widget:queueDestroy()
-    self._is_queued_destroy = true
+    if not self._is_queued_destroy then
+        self._is_queued_destroy = true
+        self:_emitSignal(self.on_queued_destroy)
+    end
+end
+
+--#endregion
+
+
+--#region Protected
+
+--- @protected
+--- @param signal TreeGUI.Signal
+--- @param ... any
+function Widget:_emitSignal(signal, ...)
+    signal:_emit(...) --- @diagnostic disable-line: invisible
 end
 
 --#endregion
@@ -246,6 +296,8 @@ function Widget:_onDestroy()
     for _, child in ipairs(self._children) do
         child:_onDestroy()
     end
+
+    self:_emitSignal(self.on_destroyed)
 end
 
 --- Processa os filhos na fila de destruição.
@@ -317,6 +369,12 @@ function Widget:_setTree(tree)
 
     for _, child in ipairs(self._children) do
         child:_setTree(tree)
+    end
+
+    if self._tree then
+        self:_emitSignal(self.on_tree_entered, self._tree)
+    elseif old_tree then
+        self:_emitSignal(self.on_tree_exited, old_tree)
     end
 end
 

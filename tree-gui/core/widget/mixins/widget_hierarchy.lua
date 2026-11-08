@@ -57,6 +57,7 @@ function Widget:_extractChildAt(index)
         table.remove(self._children, index)
         child._parent = nil
         child:_setTree(nil)
+        if not child._is_internal then self:_emitSignal(self.on_child_exited, child) end
     end
 end
 
@@ -99,6 +100,7 @@ function Widget:_insertChild(child)
     self._children[#self._children+1] = child
     child._parent = self
     child:_setTree(self._tree)
+    if not child._is_internal then self:_emitSignal(self.on_child_entered, child) end
     self:_queueLayout()
     self:queueUpdateTheme()
 end

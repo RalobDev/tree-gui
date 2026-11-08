@@ -8,8 +8,8 @@
 --- @field Label TreeGUI.Theme.LabelStyle?
 --- @field Panel TreeGUI.Theme.PanelStyle?
 --- @field StackContainer TreeGUI.Theme.StackContainerStyle?
---- @field HStackContainer TreeGUI.Theme.StackContainerStyle?
---- @field VStackContainer TreeGUI.Theme.StackContainerStyle?
+--- @field StackContainerH TreeGUI.Theme.StackContainerStyle?
+--- @field StackContainerV TreeGUI.Theme.StackContainerStyle?
 --- @field Widget TreeGUI.Theme.WidgetStyle?
 
 --- @class TreeGUI.Theme.Variants
@@ -18,8 +18,8 @@
 --- @field Label table<string, TreeGUI.Theme.LabelStyle>?
 --- @field Panel table<string, TreeGUI.Theme.PanelStyle>?
 --- @field StackContainer table<string, TreeGUI.Theme.StackContainerStyle>?
---- @field HStackContainer table<string, TreeGUI.Theme.StackContainerStyle>?
---- @field VStackContainer table<string, TreeGUI.Theme.StackContainerStyle>?
+--- @field StackContainerH table<string, TreeGUI.Theme.StackContainerStyle>?
+--- @field StackContainerV table<string, TreeGUI.Theme.StackContainerStyle>?
 --- @field Widget table<string, TreeGUI.Theme.WidgetStyle>?
 
 --- Style properties shared by every Widget.

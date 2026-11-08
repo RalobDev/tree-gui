@@ -33,8 +33,8 @@ local theme = Theme:new {
             }
         },
         StackContainer = { separation = 4 },
-        HStackContainer = { separation = 4 },
-        VStackContainer = { separation = 4 },
+        StackContainerH = { separation = 4 },
+        StackContainerV = { separation = 4 },
     }
 }
 

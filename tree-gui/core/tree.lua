@@ -10,7 +10,7 @@ local Signal = require(ROOT .. ".core.signal") --- @type TreeGUI.Signal
 
 --- Responsible for handling input, updating, managing states and rendering Widget's.
 --- Without a Tree, a Widget becomes a ghost object.
---- @class TreeGUI.Tree: TreeGUI.Class
+--- @class TreeGUI.Tree: TreeGUI.Class, TreeGUI.Resource.Owner
 --- @field on_child_entered TreeGUI.Signal<fun(child: TreeGUI.Widget)> Called when a child enters the Tree.
 --- @field on_child_exited TreeGUI.Signal<fun(child: TreeGUI.Widget)> Called when a child leaves the Tree.
 --- @field on_layout_updated TreeGUI.Signal<fun()> Called when the Tree layout is updated.
@@ -313,7 +313,7 @@ function Tree:queueLayout()
     self._layout_dirty = true
 end
 
---- Marks the Tree para atualizar os valores relacionado ao tema dos filhos.
+--- Marks the Tree to update the values ​​related to the children's theme.
 --- No need to call manually this method, as Theme's already do this automatically.
 function Tree:queueUpdateTheme()
     self._theme_dirty = true
@@ -576,6 +576,13 @@ function Tree:_pickWidget(x, y)
         if hit then return hit end
     end
     return nil
+end
+
+--- Called by a Resource this Tree observes.
+--- @protected
+--- @param resource TreeGUI.Resource
+function Tree:_onResourceChanged(resource)
+    self:queueUpdateTheme()
 end
 
 --#endregion

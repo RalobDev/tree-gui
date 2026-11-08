@@ -3,6 +3,7 @@
 
 --- Theme data: one optional style table per Widget type name.
 --- @class TreeGUI.Theme.Data
+--- @field ColorRect TreeGUI.Theme.WidgetStyle?
 --- @field Container TreeGUI.Theme.ContainerStyle?
 --- @field StackContainer TreeGUI.Theme.StackContainerStyle?
 --- @field HStackContainer TreeGUI.Theme.StackContainerStyle?
@@ -10,6 +11,7 @@
 --- @field Widget TreeGUI.Theme.WidgetStyle?
 
 --- @class TreeGUI.Theme.Variants
+--- @field ColorRect table<string, TreeGUI.Theme.WidgetStyle>?
 --- @field Container table<string, TreeGUI.Theme.ContainerStyle>?
 --- @field StackContainer table<string, TreeGUI.Theme.StackContainerStyle>?
 --- @field HStackContainer table<string, TreeGUI.Theme.StackContainerStyle>?

@@ -394,7 +394,7 @@ function Tree:keyreleased(key, scancode)
 
     local owner = self._focus_owner
     if owner then
-        self:_emitSignal(owner.on_mousereleased, key, scancode)
+        self:_emitSignal(owner.on_keyreleased, key, scancode)
     end
     return owner ~= nil and owner:_onKeyReleased(key, scancode) == true
 end

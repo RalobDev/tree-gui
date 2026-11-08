@@ -280,6 +280,13 @@ function Widget:_emitSignal(signal, ...)
     signal:_emit(...) --- @diagnostic disable-line: invisible
 end
 
+--- Called by a Resource this Widget observes.
+--- @protected
+--- @param resource TreeGUI.Resource
+function Widget:_onResourceChanged(resource)
+    self:queueUpdateTheme()
+end
+
 --#endregion
 
 

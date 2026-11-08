@@ -118,7 +118,31 @@ end
 --- @private
 --- @param props TreeGUI.StyleBox.Props
 function StyleBox:_applyProps(props)
-    -- Apply properties with setters.
+    if props.color ~= nil then self:setColorTable(props.color) end
+    if props.draw_center ~= nil then self:setDrawCenter(props.draw_center) end
+    if props.skew_x ~= nil then self:setSkewX(props.skew_x) end
+    if props.skew_y ~= nil then self:setSkewY(props.skew_y) end
+    if props.border_width_left ~= nil then self:setBorderWidthLeft(props.border_width_left) end
+    if props.border_width_top ~= nil then self:setBorderWidthTop(props.border_width_top) end
+    if props.border_width_right ~= nil then self:setBorderWidthRight(props.border_width_right) end
+    if props.border_width_bottom ~= nil then self:setBorderWidthBottom(props.border_width_bottom) end
+    if props.border_color ~= nil then self:setBorderColorTable(props.border_color) end
+    if props.border_blend ~= nil then self:setBorderBlend(props.border_blend) end
+    if props.corner_radius_top_left ~= nil then self:setCornerRadiusTopLeft(props.corner_radius_top_left) end
+    if props.corner_radius_top_right ~= nil then self:setCornerRadiusTopRight(props.corner_radius_top_right) end
+    if props.corner_radius_bottom_right ~= nil then self:setCornerRadiusBottomRight(props.corner_radius_bottom_right) end
+    if props.corner_radius_bottom_left ~= nil then self:setCornerRadiusBottomLeft(props.corner_radius_bottom_left) end
+    if props.corner_detail ~= nil then self:setCornerDetail(props.corner_detail) end
+    if props.expand_margin_left ~= nil then self:setExpandMarginLeft(props.expand_margin_left) end
+    if props.expand_margin_top ~= nil then self:setExpandMarginTop(props.expand_margin_top) end
+    if props.expand_margin_right ~= nil then self:setExpandMarginRight(props.expand_margin_right) end
+    if props.expand_margin_bottom ~= nil then self:setExpandMarginBottom(props.expand_margin_bottom) end
+    if props.shadow_color ~= nil then self:setShadowColorTable(props.shadow_color) end
+    if props.shadow_size ~= nil then self:setShadowSize(props.shadow_size) end
+    if props.shadow_offset_x ~= nil then self:setShadowOffsetX(props.shadow_offset_x) end
+    if props.shadow_offset_y ~= nil then self:setShadowOffsetY(props.shadow_offset_y) end
+    if props.anti_aliasing ~= nil then self:setAntiAliasing(props.anti_aliasing) end
+    if props.anti_aliasing_size ~= nil then self:setAntiAliasingSize(props.anti_aliasing_size) end
 end
 
 --#endregion

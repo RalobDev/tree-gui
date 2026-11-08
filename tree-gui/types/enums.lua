@@ -13,6 +13,7 @@ Enums.ClassName = {
     StackContainerH = "StackContainerH",
     StackContainerV = "StackContainerV",
     StyleBox = "StyleBox",
+    TextSettings = "TextSettings",
     Theme = "Theme",
     Tree = "Tree",
     Widget = "Widget",

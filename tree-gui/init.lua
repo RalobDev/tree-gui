@@ -15,6 +15,7 @@ local TreeGUI = {
     StackContainerH = require(ROOT .. ".containers.stack-containers.stack_container_h"), --- @type TreeGUI.StackContainerH
     StackContainerV = require(ROOT .. ".containers.stack-containers.stack_container_v"), --- @type TreeGUI.StackContainerV
     StyleBox = require(ROOT .. ".resources.style_box"), --- @type TreeGUI.StyleBox
+    TextSettings = require(ROOT .. ".resources.text_settings"), --- @type TreeGUI.TextSettings
     Theme = require(ROOT .. ".resources.theme"), --- @type TreeGUI.Theme
     Tree = require(ROOT .. ".core.tree"), --- @type TreeGUI.Tree
     Widget = require(ROOT .. ".core.widget.widget") --- @type TreeGUI.Widget

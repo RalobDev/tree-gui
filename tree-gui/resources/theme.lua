@@ -11,7 +11,7 @@ local Theme = Resource:extend("Theme")
 
 --#region Definitions
 
---- @class TreeGUI.Theme.Props
+--- @class TreeGUI.Theme.Props: TreeGUI.Resource.Props
 --- @field data TreeGUI.Theme.Data?
 --- @field variants TreeGUI.Theme.Variants?
 
@@ -67,7 +67,11 @@ end
 
 --- @param props TreeGUI.Theme.Props
 function Theme:configure(props)
+    self:_checkLock()
+
     self:_batch(self._applyProps, props)
+
+    Resource.configure(self, props)
 end
 
 --#endregion
@@ -149,6 +153,7 @@ end
 --- @param type_name TreeGUI.Enums.ThemeType
 --- @param style TreeGUI.Theme.WidgetStyle
 function Theme:setStyle(type_name, style)
+    self:_checkLock()
     local old_values = {} --- @type any[]
     collectValues(self._data[type_name], old_values)
 
@@ -164,6 +169,7 @@ end
 --- @param variant_name string
 --- @param style TreeGUI.Theme.WidgetStyle
 function Theme:setVariantStyle(type_name, variant_name, style)
+    self:_checkLock()
     self._variants[type_name] = self._variants[type_name] or {}
 
     local old_values = {} --- @type any[]
@@ -181,6 +187,7 @@ end
 --- @param key string
 --- @param value any
 function Theme:setStyleValue(type_name, key, value)
+    self:_checkLock()
     local data = self._data[type_name]
     if not data then
         data = {}
@@ -203,6 +210,7 @@ end
 --- @param key string
 --- @param value any
 function Theme:setVariantStyleValue(type_name, variant_name, key, value)
+    self:_checkLock()
     self._variants[type_name] = self._variants[type_name] or {}
     self._variants[type_name][variant_name] = self._variants[type_name][variant_name] or {}
 

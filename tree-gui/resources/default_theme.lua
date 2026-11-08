@@ -7,6 +7,7 @@ local StyleBox = require(ROOT .. ".resources.style_box") --- @type TreeGUI.Style
 local COLOR = DefaultColor.dark
 
 local theme = Theme:new {
+    lock = true,
     data = {
         Widget = {
             margin_left = 0,
@@ -22,6 +23,7 @@ local theme = Theme:new {
         },
         Panel = {
             style_box = StyleBox:new {
+                lock = true,
                 color = COLOR.surface,
                 corners_radius = 8,
                 borders_width = 2,

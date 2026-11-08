@@ -23,14 +23,8 @@ local theme = Theme:new {
         Panel = {
             style_box = StyleBox:new {
                 color = COLOR.surface,
-                corner_radius_top_left = 8,
-                corner_radius_top_right = 8,
-                corner_radius_bottom_right = 8,
-                corner_radius_bottom_left = 8,
-                border_width_left = 2,
-                border_width_top = 2,
-                border_width_right = 2,
-                border_width_bottom = 2,
+                corners_radius = 8,
+                borders_width = 2,
                 border_color = COLOR.border
             }
         },

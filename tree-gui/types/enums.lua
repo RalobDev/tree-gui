@@ -18,6 +18,7 @@ Enums.ClassName = {
 
 --- @enum TreeGUI.Enums.ThemeType
 Enums.ThemeType = {
+    ColorRect = "ColorRect",
     Container = "Container",
     StackContainer = "StackContainer",
     StackContainerH = "StackContainerH",

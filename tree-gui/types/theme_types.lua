@@ -3,6 +3,7 @@
 
 --- Theme data: one optional style table per Widget type name.
 --- @class TreeGUI.Theme.Data
+--- @field Button TreeGUI.Theme.ButtonStyle
 --- @field ColorRect TreeGUI.Theme.WidgetStyle?
 --- @field Container TreeGUI.Theme.ContainerStyle?
 --- @field Label TreeGUI.Theme.LabelStyle?
@@ -13,6 +14,7 @@
 --- @field Widget TreeGUI.Theme.WidgetStyle?
 
 --- @class TreeGUI.Theme.Variants
+--- @field Button table<string, TreeGUI.Theme.ButtonStyle>?
 --- @field ColorRect table<string, TreeGUI.Theme.WidgetStyle>?
 --- @field Container table<string, TreeGUI.Theme.ContainerStyle>?
 --- @field Label table<string, TreeGUI.Theme.LabelStyle>?
@@ -28,6 +30,8 @@
 --- @field margin_top number?
 --- @field margin_right number?
 --- @field margin_bottom number?
+
+--- @class TreeGUI.Theme.ButtonStyle
 
 --- @class TreeGUI.Theme.ContainerStyle: TreeGUI.Theme.WidgetStyle
 --- @field padding_left number?

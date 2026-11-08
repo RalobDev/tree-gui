@@ -4,6 +4,7 @@ local Enums = {}
 --- @enum TreeGUI.Enums.ClassName
 Enums.ClassName = {
     BaseButton = "BaseButton",
+    Button = "Button",
     Class = "Class",
     ColorRect = "ColorRect",
     Container = "Container",
@@ -23,6 +24,7 @@ Enums.ClassName = {
 
 --- @enum TreeGUI.Enums.ThemeType
 Enums.ThemeType = {
+    Button = "Button",
     ColorRect = "ColorRect",
     Container = "Container",
     Label = "Label",

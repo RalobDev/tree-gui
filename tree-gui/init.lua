@@ -7,6 +7,7 @@ local DrawDebug = require(ROOT .. ".tools.debug_tool") --- @type TreeGUI.DebugDr
 
 --- @class TreeGUI
 local TreeGUI = {
+    Button = require(ROOT .. ".core.buttons.button"), --- @type TreeGUI.Button
     ColorRect = require(ROOT .. ".visual.color_rect"), --- @type TreeGUI.ColorRect
     Container = require(ROOT .. ".containers.container"), --- @type TreeGUI.Container
     Enums = require(ROOT .. ".types.enums"), --- @type TreeGUI.Enums

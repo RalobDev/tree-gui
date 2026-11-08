@@ -381,6 +381,7 @@ function Widget:_setTree(tree)
     if self._tree then
         self:_emitSignal(self.on_tree_entered, self._tree)
     elseif old_tree then
+        self:_onTreeExited(old_tree)
         self:_emitSignal(self.on_tree_exited, old_tree)
     end
 end

@@ -372,7 +372,10 @@ function Tree:keypressed(key, scancode, isrepeat)
     self:_emitSignal(self.on_keypressed, key, scancode, isrepeat)
 
     local owner = self._focus_owner
-    if owner and owner:_onKeyPressed(key, scancode, isrepeat) then return true end
+    if owner then
+        self:_emitSignal(owner.on_keypressed, key, scancode, isrepeat)
+        if owner:_onKeyPressed(key, scancode, isrepeat) then return true end
+    end
 
     local side = NAV_KEYS[key]
     if key == "tab" then
@@ -390,6 +393,9 @@ function Tree:keyreleased(key, scancode)
     self:_emitSignal(self.on_keyreleased, key, scancode)
 
     local owner = self._focus_owner
+    if owner then
+        self:_emitSignal(owner.on_mousereleased, key, scancode)
+    end
     return owner ~= nil and owner:_onKeyReleased(key, scancode) == true
 end
 
@@ -699,8 +705,14 @@ function Tree:_setFocusOwner(widget)
     if old == widget then return end
 
     self._focus_owner = widget
-    if old then old:_onFocusExited() end
-    if widget then widget:_onFocusEntered() end
+    if old then
+        old:_onFocusExited()
+        self:_emitSignal(old.on_focus_changed, false)
+    end
+    if widget then
+        widget:_onFocusEntered()
+        self:_emitSignal(widget.on_focus_changed, true)
+    end
 
     self:_emitSignal(self.on_focus_changed, widget, old)
 end
@@ -712,8 +724,14 @@ function Tree:_setHovered(widget)
     if old == widget then return end
 
     self._hovered = widget
-    if old then old:_onMouseExited() end
-    if widget then widget:_onMouseEntered() end
+    if old then
+        old:_onMouseExited()
+        self:_emitSignal(old.on_hovered_changed, false)
+    end
+    if widget then
+        widget:_onMouseEntered()
+        self:_emitSignal(widget.on_hovered_changed, true)
+    end
 
     self:_emitSignal(self.on_hovered_changed, widget, old)
 end

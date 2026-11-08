@@ -69,6 +69,7 @@ function Resource:new(props)
     obj._batch_depth = 0
     obj._batch_pending = false
     obj._emitting = false
+    obj._locked = false
 
     if props then obj:configure(props) end
 

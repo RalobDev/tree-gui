@@ -3,6 +3,7 @@ local Enums = {}
 
 --- @enum TreeGUI.Enums.ClassName
 Enums.ClassName = {
+    BaseButton = "BaseButton",
     Class = "Class",
     ColorRect = "ColorRect",
     Container = "Container",

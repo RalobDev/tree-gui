@@ -281,7 +281,7 @@ end
 --- Sets the border color.
 --- @param color TreeGUI.Color
 function StyleBox:setBorderColorTable(color)
-    self:setColor(unpack(color))
+    self:setBorderColor(unpack(color))
 end
 
 --- If `enabled` is `true`, there will be a smooth transition from the border color to the StyleBox color.
@@ -432,7 +432,7 @@ end
 --- Sets the shadow color.
 --- @param color TreeGUI.Color
 function StyleBox:setShadowColorTable(color)
-    self:setColor(unpack(color))
+    self:setShadowColor(unpack(color))
 end
 
 --- Sets the shadow size.

@@ -32,6 +32,12 @@ local StyleBox = Resource:extend("StyleBox")
 
 local SHADER = love.graphics.newShader(ROOT:gsub("%.", "/") .. "/resources/shaders/style_box_shader.glsl")
 
+local PIXEL = (function()
+    local data = love.image.newImageData(1, 1)
+    data:setPixel(0, 0, 1, 1, 1, 1)
+    return love.graphics.newImage(data)
+end)()
+
 
 --#region Definitions
 
@@ -167,7 +173,6 @@ end
 --- @param width number
 --- @param height number
 function StyleBox:draw(x, y, width, height)
-
     local em = {
         self._expand_margin_left,
         self._expand_margin_top,
@@ -217,6 +222,16 @@ function StyleBox:draw(x, y, width, height)
         inner(outerR[4], bw[1], bw[4]), -- BL
     }
 
+    -- Quad large enough to contain shadow, skew and anti-aliasing
+    local pad = self._shadow_size
+                + math.max(math.abs(self._shadow_offset_x), math.abs(self._shadow_offset_y))
+                + math.abs(self._skew_x) + math.abs(self._skew_y)
+                + aa + 2
+    local qx, qy = ox0 - pad, oy0 - pad
+    local qw, qh = ow + pad * 2, oh + pad * 2
+
+    send(SHADER, "quadPos",  { qx, qy })
+    send(SHADER, "quadSize", { qw, qh })
     send(SHADER, "bgColor",      self._color)
     send(SHADER, "drawCenter",   self._draw_center and 1 or 0)
     send(SHADER, "skew",         { self._skew_x, self._skew_y })
@@ -234,15 +249,9 @@ function StyleBox:draw(x, y, width, height)
     send(SHADER, "innerHalf",    { ihx, ihy })
     send(SHADER, "innerRadii",   innerR)
 
-    -- Quad large enough to contain shadow, skew and anti-aliasing
-    local pad = self._shadow_size
-                + math.max(math.abs(self._shadow_offset_x), math.abs(self._shadow_offset_y))
-                + math.abs(self._skew_x) + math.abs(self._skew_y)
-                + aa + 2
-
     local prev = love.graphics.getShader()
     love.graphics.setShader(SHADER)
-    love.graphics.rectangle("fill", ox0 - pad, oy0 - pad, ow + pad * 2, oh + pad * 2)
+    love.graphics.draw(PIXEL, qx, qy, 0, qw, qh)
     love.graphics.setShader(prev)
 end
 
@@ -292,6 +301,7 @@ end
 --- @param b number
 --- @param a number?
 function StyleBox:setColor(r, g, b, a)
+    a = a or 1
     local color = self._color
     if
         color[1] ~= r
@@ -299,7 +309,7 @@ function StyleBox:setColor(r, g, b, a)
         or color[3] ~= b
         or color[4] ~= a
     then
-        color[1], color[2], color[3], color[4] = r, g, b, a or 1
+        color[1], color[2], color[3], color[4] = r, g, b, a
         self:_emitChanged()
     end
 end
@@ -402,6 +412,7 @@ end
 --- @param b number
 --- @param a number?
 function StyleBox:setBorderColor(r, g, b, a)
+    a = a or 1
     local color = self._border_color
     if
         color[1] ~= r
@@ -409,7 +420,7 @@ function StyleBox:setBorderColor(r, g, b, a)
         or color[3] ~= b
         or color[4] ~= a
     then
-        color[1], color[2], color[3], color[4] = r, g, b, a or 1
+        color[1], color[2], color[3], color[4] = r, g, b, a
         self:_emitChanged()
     end
 end
@@ -553,6 +564,7 @@ end
 --- @param b number
 --- @param a number?
 function StyleBox:setShadowColor(r, g, b, a)
+    a = a or 1
     local color = self._shadow_color
     if
         color[1] ~= r
@@ -560,7 +572,7 @@ function StyleBox:setShadowColor(r, g, b, a)
         or color[3] ~= b
         or color[4] ~= a
     then
-        color[1], color[2], color[3], color[4] = r, g, b, a or 1
+        color[1], color[2], color[3], color[4] = r, g, b, a
         self:_emitChanged()
     end
 end

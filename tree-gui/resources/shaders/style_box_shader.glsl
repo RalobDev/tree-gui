@@ -9,6 +9,8 @@ vec4 position(mat4 transform_projection, vec4 vertex_position)
 #endif
 
 #ifdef PIXEL
+uniform vec2 quadPos;
+uniform vec2 quadSize;
 uniform vec4  bgColor;
 uniform float drawCenter;
 uniform vec2  skew;
@@ -76,7 +78,7 @@ vec4 premul(vec4 c) { return vec4(c.rgb * c.a, c.a); }
 
 vec4 effect(vec4 color, Image tex, vec2 uv, vec2 sc)
 {
-    vec2 p = v_pos - boxCenter;
+    vec2 p = quadPos + uv * quadSize - boxCenter;
     vec2 q = unskew(p);
 
     float dOuter = sdRoundBox(q, boxHalf, outerRadii);

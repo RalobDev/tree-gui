@@ -142,4 +142,19 @@ Enums.TextAlignmentVertical = {
     END = "END"
 }
 
+--- @enum TreeGUI.Enums.ActionMode
+Enums.ActionMode = {
+    PRESS = "PRESS",
+    RELEASE = "RELEASE"
+}
+
+--- @enum TreeGUI.Enums.DrawMode
+Enums.DrawMode = {
+    NORMAL = "NORMAL",
+    PRESSED = "PRESSED",
+    HOVER = "HOVER",
+    HOVER_PRESSED = "HOVER_PRESSED",
+    DISABLED = "DISABLED",
+}
+
 return Enums

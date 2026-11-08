@@ -5,6 +5,7 @@
 --- @class TreeGUI.Theme.Data
 --- @field ColorRect TreeGUI.Theme.WidgetStyle?
 --- @field Container TreeGUI.Theme.ContainerStyle?
+--- @field Label TreeGUI.Theme.LabelStyle?
 --- @field Panel TreeGUI.Theme.PanelStyle?
 --- @field StackContainer TreeGUI.Theme.StackContainerStyle?
 --- @field HStackContainer TreeGUI.Theme.StackContainerStyle?
@@ -14,6 +15,7 @@
 --- @class TreeGUI.Theme.Variants
 --- @field ColorRect table<string, TreeGUI.Theme.WidgetStyle>?
 --- @field Container table<string, TreeGUI.Theme.ContainerStyle>?
+--- @field Label table<string, TreeGUI.Theme.LabelStyle>?
 --- @field Panel table<string, TreeGUI.Theme.PanelStyle>?
 --- @field StackContainer table<string, TreeGUI.Theme.StackContainerStyle>?
 --- @field HStackContainer table<string, TreeGUI.Theme.StackContainerStyle>?
@@ -32,6 +34,8 @@
 --- @field padding_top number?
 --- @field padding_right number?
 --- @field padding_bottom number?
+
+--- @class TreeGUI.Theme.LabelStyle: TreeGUI.Theme.WidgetStyle
 
 --- @class TreeGUI.Theme.PanelStyle: TreeGUI.Theme.WidgetStyle
 --- @field style_box TreeGUI.StyleBox?

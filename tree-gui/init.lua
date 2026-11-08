@@ -10,6 +10,7 @@ local TreeGUI = {
     ColorRect = require(ROOT .. ".visual.color_rect"), --- @type TreeGUI.ColorRect
     Container = require(ROOT .. ".containers.container"), --- @type TreeGUI.Container
     Enums = require(ROOT .. ".types.enums"), --- @type TreeGUI.Enums
+    Label = require(ROOT .. ".visual.label"), --- @type TreeGUI.Label
     Panel = require(ROOT .. ".visual.panel"), --- @type TreeGUI.Panel
     StackContainer = require(ROOT .. ".containers.stack-containers.stack_container"), --- @type TreeGUI.StackContainer
     StackContainerH = require(ROOT .. ".containers.stack-containers.stack_container_h"), --- @type TreeGUI.StackContainerH

@@ -301,6 +301,7 @@ end
 --- @param b number
 --- @param a number?
 function StyleBox:setColor(r, g, b, a)
+    a = a or 1
     local color = self._color
     if
         color[1] ~= r
@@ -308,7 +309,7 @@ function StyleBox:setColor(r, g, b, a)
         or color[3] ~= b
         or color[4] ~= a
     then
-        color[1], color[2], color[3], color[4] = r, g, b, a or 1
+        color[1], color[2], color[3], color[4] = r, g, b, a
         self:_emitChanged()
     end
 end
@@ -411,6 +412,7 @@ end
 --- @param b number
 --- @param a number?
 function StyleBox:setBorderColor(r, g, b, a)
+    a = a or 1
     local color = self._border_color
     if
         color[1] ~= r
@@ -418,7 +420,7 @@ function StyleBox:setBorderColor(r, g, b, a)
         or color[3] ~= b
         or color[4] ~= a
     then
-        color[1], color[2], color[3], color[4] = r, g, b, a or 1
+        color[1], color[2], color[3], color[4] = r, g, b, a
         self:_emitChanged()
     end
 end
@@ -562,6 +564,7 @@ end
 --- @param b number
 --- @param a number?
 function StyleBox:setShadowColor(r, g, b, a)
+    a = a or 1
     local color = self._shadow_color
     if
         color[1] ~= r
@@ -569,7 +572,7 @@ function StyleBox:setShadowColor(r, g, b, a)
         or color[3] ~= b
         or color[4] ~= a
     then
-        color[1], color[2], color[3], color[4] = r, g, b, a or 1
+        color[1], color[2], color[3], color[4] = r, g, b, a
         self:_emitChanged()
     end
 end

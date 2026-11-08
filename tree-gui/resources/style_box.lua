@@ -41,7 +41,7 @@ end)()
 
 --#region Definitions
 
---- @class TreeGUI.StyleBox.Props
+--- @class TreeGUI.StyleBox.Props: TreeGUI.Resource.Props
 --- @field color TreeGUI.Color?
 --- @field draw_center boolean?
 --- @field skew_x number?
@@ -167,7 +167,10 @@ end
 
 --- @param props TreeGUI.StyleBox.Props
 function StyleBox:configure(props)
+    self:_checkLock()
     self:_batch(self._applyProps, props)
+
+    Resource.configure(self, props)
 end
 
 --- Draws the StyleBox in the rectangle (x, y, width, height).
@@ -307,6 +310,7 @@ end
 --- @param b number
 --- @param a number?
 function StyleBox:setColor(r, g, b, a)
+    self:_checkLock()
     a = a or 1
     local color = self._color
     if
@@ -323,12 +327,14 @@ end
 --- Sets the color of the StyleBox.
 --- @param color TreeGUI.Color
 function StyleBox:setColorTable(color)
+    self:_checkLock()
     self:setColor(unpack(color))
 end
 
 --- If `enabled` is `true`, the center of the StyleBox will be drawn.
 --- @param enabled boolean?
 function StyleBox:setDrawCenter(enabled)
+    self:_checkLock()
     enabled = enabled ~= false
     if self._draw_center ~= enabled then
         self._draw_center = enabled
@@ -340,6 +346,7 @@ end
 --- @param x number
 --- @param y number
 function StyleBox:setSkew(x, y)
+    self:_checkLock()
     if self._skew_x ~= x or self._skew_y ~= y then
         self._skew_x = x
         self._skew_y = y
@@ -350,18 +357,21 @@ end
 --- Sets the X skew of the StyleBox.
 --- @param x number
 function StyleBox:setSkewX(x)
+    self:_checkLock()
     self:setSkew(x, self._skew_y)
 end
 
 --- Sets the Y skew of the StyleBox.
 --- @param y number
 function StyleBox:setSkewY(y)
+    self:_checkLock()
     self:setSkew(self._skew_x, y)
 end
 
 --- Sets the border width on all sides.
 --- @param width number
 function StyleBox:setBordersWidth(width)
+    self:_checkLock()
     if
         self._border_width_left ~= width
         or self._border_width_top ~= width
@@ -379,6 +389,7 @@ end
 --- Sets the left border width.
 --- @param width number
 function StyleBox:setBorderWidthLeft(width)
+    self:_checkLock()
     if self._border_width_left ~= width then
         self._border_width_left = width
         self:_emitChanged()
@@ -388,6 +399,7 @@ end
 --- Sets the top border width.
 --- @param width number
 function StyleBox:setBorderWidthTop(width)
+    self:_checkLock()
     if self._border_width_top ~= width then
         self._border_width_top = width
         self:_emitChanged()
@@ -397,6 +409,7 @@ end
 --- Sets the right border width.
 --- @param width number
 function StyleBox:setBorderWidthRight(width)
+    self:_checkLock()
     if self._border_width_right ~= width then
         self._border_width_right = width
         self:_emitChanged()
@@ -406,6 +419,7 @@ end
 --- Sets the bottom border width.
 --- @param width number
 function StyleBox:setBorderWidthBottom(width)
+    self:_checkLock()
     if self._border_width_bottom ~= width then
         self._border_width_bottom = width
         self:_emitChanged()
@@ -418,6 +432,7 @@ end
 --- @param b number
 --- @param a number?
 function StyleBox:setBorderColor(r, g, b, a)
+    self:_checkLock()
     a = a or 1
     local color = self._border_color
     if
@@ -434,12 +449,14 @@ end
 --- Sets the border color.
 --- @param color TreeGUI.Color
 function StyleBox:setBorderColorTable(color)
+    self:_checkLock()
     self:setBorderColor(unpack(color))
 end
 
 --- If `enabled` is `true`, there will be a smooth transition from the border color to the StyleBox color.
 --- @param enabled boolean
 function StyleBox:setBorderBlend(enabled)
+    self:_checkLock()
     enabled = enabled ~= false
     if self._border_blend ~= enabled then
         self._border_blend = enabled
@@ -450,6 +467,7 @@ end
 --- Sets the radius of all corners.
 --- @param radius number
 function StyleBox:setCornersRadius(radius)
+    self:_checkLock()
     if
         self._corner_radius_top_left ~= radius
         or self._corner_radius_top_right ~= radius
@@ -467,6 +485,7 @@ end
 --- Sets the radius of the top left corner.
 --- @param radius number
 function StyleBox:setCornerRadiusTopLeft(radius)
+    self:_checkLock()
     if self._corner_radius_top_left ~= radius then
         self._corner_radius_top_left = radius
         self:_emitChanged()
@@ -476,6 +495,7 @@ end
 --- Sets the radius of the top right corner.
 --- @param radius number
 function StyleBox:setCornerRadiusTopRight(radius)
+    self:_checkLock()
     if self._corner_radius_top_right ~= radius then
         self._corner_radius_top_right = radius
         self:_emitChanged()
@@ -485,6 +505,7 @@ end
 --- Sets the radius of the bottom right corner.
 --- @param radius number
 function StyleBox:setCornerRadiusBottomRight(radius)
+    self:_checkLock()
     if self._corner_radius_bottom_right ~= radius then
         self._corner_radius_bottom_right = radius
         self:_emitChanged()
@@ -494,6 +515,7 @@ end
 --- Sets the radius of the bottom left corner.
 --- @param radius number
 function StyleBox:setCornerRadiusBottomLeft(radius)
+    self:_checkLock()
     if self._corner_radius_bottom_left ~= radius then
         self._corner_radius_bottom_left = radius
         self:_emitChanged()
@@ -504,6 +526,7 @@ end
 --- If `detail` is 0, the corners will be a perfectly circular arc.
 --- @param detail number
 function StyleBox:setCornerDetail(detail)
+    self:_checkLock()
     detail = math.max(detail, 0)
     if self._corner_detail ~= detail then
         self._corner_detail = detail
@@ -514,6 +537,7 @@ end
 --- Sets how much the margins on all sides will expand.
 --- @param width number
 function StyleBox:setExpandMargins(width)
+    self:_checkLock()
     if
         self._expand_margin_left ~= width
         or self._expand_margin_top ~= width
@@ -531,6 +555,7 @@ end
 --- Sets how much the left margin will expand.
 --- @param width number
 function StyleBox:setExpandMarginLeft(width)
+    self:_checkLock()
     if self._expand_margin_left ~= width then
         self._expand_margin_left = width
         self:_emitChanged()
@@ -540,6 +565,7 @@ end
 --- Sets how much the top margin will expand.
 --- @param width number
 function StyleBox:setExpandMarginTop(width)
+    self:_checkLock()
     if self._expand_margin_top ~= width then
         self._expand_margin_top = width
         self:_emitChanged()
@@ -549,6 +575,7 @@ end
 --- Sets how much the right margin will expand.
 --- @param width number
 function StyleBox:setExpandMarginRight(width)
+    self:_checkLock()
     if self._expand_margin_right ~= width then
         self._expand_margin_right = width
         self:_emitChanged()
@@ -558,6 +585,7 @@ end
 --- Sets how much the bottom margin will expand.
 --- @param width number
 function StyleBox:setExpandMarginBottom(width)
+    self:_checkLock()
     if self._expand_margin_bottom ~= width then
         self._expand_margin_bottom = width
         self:_emitChanged()
@@ -570,6 +598,7 @@ end
 --- @param b number
 --- @param a number?
 function StyleBox:setShadowColor(r, g, b, a)
+    self:_checkLock()
     a = a or 1
     local color = self._shadow_color
     if
@@ -586,12 +615,14 @@ end
 --- Sets the shadow color.
 --- @param color TreeGUI.Color
 function StyleBox:setShadowColorTable(color)
+    self:_checkLock()
     self:setShadowColor(unpack(color))
 end
 
 --- Sets the shadow size.
 --- @param size number
 function StyleBox:setShadowSize(size)
+    self:_checkLock()
     if self._shadow_size ~= size then
         self._shadow_size = size
         self:_emitChanged()
@@ -602,6 +633,7 @@ end
 --- @param x number
 --- @param y number
 function StyleBox:setShadowOffset(x, y)
+    self:_checkLock()
     if self._shadow_offset_x ~= x or self._shadow_offset_y ~= y then
         self._shadow_offset_x = x
         self._shadow_offset_y = y
@@ -612,18 +644,21 @@ end
 --- Sets the X shadow offset.
 --- @param x number
 function StyleBox:setShadowOffsetX(x)
+    self:_checkLock()
     self:setShadowOffset(x, self._shadow_offset_y)
 end
 
 --- Sets the Y shadow offset.
 --- @param y number
 function StyleBox:setShadowOffsetY(y)
+    self:_checkLock()
     self:setShadowOffset(self._shadow_offset_x, y)
 end
 
 --- If `enabled` is `true`, anti-aliasing will be applied to the StyleBox.
 --- @param enabled boolean?
 function StyleBox:setAntiAliasing(enabled)
+    self:_checkLock()
     enabled = enabled ~= false
     if self._anti_aliasing ~= enabled then
         self._anti_aliasing = enabled
@@ -634,6 +669,7 @@ end
 --- Sets the anti-aliasing size.
 --- @param size number
 function StyleBox:setAntiAliasingSize(size)
+    self:_checkLock()
     size = math.max(size, 0)
     if self._anti_aliasing_size ~= size then
         self._anti_aliasing_size = size

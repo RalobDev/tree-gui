@@ -4,6 +4,11 @@ local Class = require(ROOT .. ".libs.class") --- @type TreeGUI.Class
 local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 
 --- @class TreeGUI.Resource: TreeGUI.Class, TreeGUI.Resource.Owner
+--- @field _owners table<TreeGUI.Resource.Owner, boolean>
+--- @field _batch_depth number
+--- @field _batch_pending boolean
+--- @field _emitting boolean
+--- @field _locked boolean
 local Resource = Class:extend("Resource")
 
 --- Fields owned by the Resource: never copied by `duplicate()`.
@@ -12,12 +17,14 @@ local RESERVED = {
     _batch_depth = true,
     _batch_pending = true,
     _emitting = true,
+    _locked = true
 }
 
 
 --#region Definitions
 
 --- @class TreeGUI.Resource.Props
+--- @field lock boolean?
 
 --- Anything that can observe a Resource.
 --- @class TreeGUI.Resource.Owner
@@ -68,8 +75,10 @@ function Resource:new(props)
     return obj
 end
 
+--- NOTE: Must be called after `_batch()` in configure. Calling beforehand causes an error, as the Resource is locked.
 --- @param props TreeGUI.Resource.Props
 function Resource:configure(props)
+    self._locked = props.lock == true
 end
 
 --- Returns a deep copy of the Resource.
@@ -85,6 +94,13 @@ end
 
 
 --#region Protected
+
+--- It must be called at the beginning of each method (setters) that modifies the Resource.
+--- Generates an error if the Resource is locked.
+--- @protected
+function Resource:_checkLock()
+    if self._locked then error(string.format("It is not possible to modify a locked Resource (%s).", self), 2) end
+end
 
 --- Notifies every owner that the Resource changed.
 --- @protected
@@ -282,6 +298,28 @@ end
 --- @param owner TreeGUI.Resource.Owner
 function Resource:_removeOwner(owner)
     self._owners[owner] = nil
+end
+
+--#endregion
+
+
+--#region Setters
+
+--- Locks the Resource from being modified. Trying to modify it generates an error.
+function Resource:lock()
+   self._locked = true
+end
+
+--#endregion
+
+
+--#region Getters
+
+--- Returns `true` if the Resource is locked. When locked, a resource cannot be modified.
+--- @nodiscard
+--- @return boolean is_locked
+function Resource:isLocked()
+    return self._locked
 end
 
 --#endregion

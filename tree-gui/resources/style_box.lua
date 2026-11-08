@@ -30,6 +30,8 @@ local Resource = require(ROOT .. ".resources.resource") --- @type TreeGUI.Resour
 --- @field private _anti_aliasing_size number
 local StyleBox = Resource:extend("StyleBox")
 
+local SHADER = love.graphics.newShader(ROOT:gsub("%.", "/") .. "/resources/shaders/style_box_shader.glsl")
+
 
 --#region Definitions
 
@@ -59,6 +61,55 @@ local StyleBox = Resource:extend("StyleBox")
 --- @field shadow_offset_y number?
 --- @field anti_aliasing boolean?
 --- @field anti_aliasing_size number?
+
+--#endregion
+
+
+--#region Local
+
+--- @nodiscard
+--- @param t table?
+--- @param default table
+--- @return table
+local function copy4(t, default)
+    t = t or default
+    return { t[1], t[2], t[3], t[4] }
+end
+
+--- @nodiscard
+--- @param v number|table
+--- @param default table
+--- @return table
+local function four(v, default)
+    if type(v) == "number" then return { v, v, v, v } end
+    if type(v) == "table" then return copy4(v, default) end
+    return copy4(default, default)
+end
+
+--- Reduces the radii proportionally if they do not fit in the rectangle.
+--- @nodiscard
+--- @param r number[]
+--- @param w number
+--- @param h number
+--- @return table
+local function fitRadii(r, w, h)
+    local f = 1
+    local function chk(sum, len)
+        if sum > len and sum > 0 then f = math.min(f, len / sum) end
+    end
+    chk(r[1] + r[2], w)
+    chk(r[4] + r[3], w)
+    chk(r[1] + r[4], h)
+    chk(r[2] + r[3], h)
+    return { r[1] * f, r[2] * f, r[3] * f, r[4] * f }
+end
+
+--- @param sh love.Shader
+--- @param name string
+--- @param value any
+local function send(sh, name, value)
+    if sh:hasUniform(name) then sh:send(name, value) end
+end
 
 --#endregion
 
@@ -108,6 +159,91 @@ end
 --- @param props TreeGUI.StyleBox.Props
 function StyleBox:configure(props)
     self:_batch(self._applyProps, props)
+end
+
+--- Draws the StyleBox in the rectangle (x, y, width, height).
+--- @param x number
+--- @param y number
+--- @param width number
+--- @param height number
+function StyleBox:draw(x, y, width, height)
+
+    local em = {
+        self._expand_margin_left,
+        self._expand_margin_top,
+        self._expand_margin_right,
+        self._expand_margin_bottom,
+    }
+    local bw = {
+        self._border_width_left,
+        self._border_width_top,
+        self._border_width_right,
+        self._border_width_bottom,
+    }
+    local corner_radius = {
+        self._corner_radius_top_left,
+        self._corner_radius_top_right,
+        self._corner_radius_bottom_right,
+        self._corner_radius_bottom_left
+    }
+    local aa = self._anti_aliasing and math.max(self._anti_aliasing_size, 0) or 0
+
+    -- Outer rectangle (with Expand Margins)
+    local ox0, oy0 = x - em[1], y - em[2]
+    local ox1, oy1 = x + width + em[3], y + height + em[4]
+    local ow, oh = ox1 - ox0, oy1 - oy0
+    if ow <= 0 or oh <= 0 then return end
+    local cx, cy = (ox0 + ox1) / 2, (oy0 + oy1) / 2
+
+    local outerR = fitRadii(corner_radius, ow, oh)
+
+    -- Internal rectangle (discounting the edges). Borderless sides are
+    -- "pushed" outwards, so the anti-aliasing of the external shape is never
+    -- lets the border color bleed.
+    local ext = math.max(aa, 1) + 1
+    local ix0 = ox0 + (bw[1] > 0 and bw[1] or -ext)
+    local iy0 = oy0 + (bw[2] > 0 and bw[2] or -ext)
+    local ix1 = ox1 - (bw[3] > 0 and bw[3] or -ext)
+    local iy1 = oy1 - (bw[4] > 0 and bw[4] or -ext)
+    local ihx = math.max((ix1 - ix0) / 2, 0)
+    local ihy = math.max((iy1 - iy0) / 2, 0)
+    local lim = math.min(ihx, ihy)
+
+    local function inner(r, a, b) return math.min(math.max(r - math.max(a, b), 0), lim) end
+    local innerR = {
+        inner(outerR[1], bw[1], bw[2]), -- TL
+        inner(outerR[2], bw[3], bw[2]), -- TR
+        inner(outerR[3], bw[3], bw[4]), -- BR
+        inner(outerR[4], bw[1], bw[4]), -- BL
+    }
+
+    send(SHADER, "bgColor",      self._color)
+    send(SHADER, "drawCenter",   self._draw_center and 1 or 0)
+    send(SHADER, "skew",         { self._skew_x, self._skew_y })
+    send(SHADER, "borderColor",  self._border_color)
+    send(SHADER, "borderBlend",  self._border_blend and 1 or 0)
+    send(SHADER, "shadowColor",  self._shadow_color)
+    send(SHADER, "shadowSize",   self._shadow_size)
+    send(SHADER, "shadowOffset", { self._shadow_offset_x, self._shadow_offset_y })
+    send(SHADER, "aaSize",       aa)
+    send(SHADER, "cornerDetail", math.max(math.floor(self._corner_detail + 0.5), 0))
+    send(SHADER, "boxCenter",    { cx, cy })
+    send(SHADER, "boxHalf",      { ow / 2, oh / 2 })
+    send(SHADER, "outerRadii",   outerR)
+    send(SHADER, "innerOffset",  { (ix0 + ix1) / 2 - cx, (iy0 + iy1) / 2 - cy })
+    send(SHADER, "innerHalf",    { ihx, ihy })
+    send(SHADER, "innerRadii",   innerR)
+
+    -- Quad large enough to contain shadow, skew and anti-aliasing
+    local pad = self._shadow_size
+                + math.max(math.abs(self._shadow_offset_x), math.abs(self._shadow_offset_y))
+                + math.abs(self._skew_x) + math.abs(self._skew_y)
+                + aa + 2
+
+    local prev = love.graphics.getShader()
+    love.graphics.setShader(SHADER)
+    love.graphics.rectangle("fill", ox0 - pad, oy0 - pad, ow + pad * 2, oh + pad * 2)
+    love.graphics.setShader(prev)
 end
 
 --#endregion

@@ -88,6 +88,13 @@ function Signal:isConnected(callback)
     return false
 end
 
+--- Retorna a quantidade de conexões do sinal.
+--- @nodiscard
+--- @return number
+function Signal:getConnectionCount()
+    return self._connection_count
+end
+
 --#endregion
 
 

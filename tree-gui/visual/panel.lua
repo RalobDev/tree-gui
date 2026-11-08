@@ -49,6 +49,13 @@ function Panel:_draw()
     self:getStyleBox():draw(0, 0, self:getDimensions())
 end
 
+--- @protected
+function Panel:_onClearStyleOverrides()
+    Widget._onClearStyleOverrides(self)
+
+    self._style_override.style_box = nil
+end
+
 --#endregion
 
 

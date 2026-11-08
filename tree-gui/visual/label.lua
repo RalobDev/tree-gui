@@ -145,6 +145,13 @@ function Label:_draw()
     love.graphics.printf(text, font, 0, y, limit, HORIZONTAL_ALIGN[self._alignment_horizontal])
 end
 
+--- @protected
+function Label:_onClearStyleOverrides()
+    Widget._onClearStyleOverrides(self)
+
+    self._style_override.text_settings = nil
+end
+
 --#endregion
 
 

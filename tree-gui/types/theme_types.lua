@@ -34,6 +34,7 @@
 --- @field padding_bottom number?
 
 --- @class TreeGUI.Theme.PanelStyle: TreeGUI.Theme.WidgetStyle
+--- @field style_box TreeGUI.StyleBox?
 
 --- @class TreeGUI.Theme.StackContainerStyle: TreeGUI.Theme.ContainerStyle
 --- @field separation number?

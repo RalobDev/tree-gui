@@ -5,7 +5,7 @@ local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 local Signal = require(ROOT .. ".core.signal") --- @type TreeGUI.Signal
 
 --- Base class for all GUI elements.
---- @class TreeGUI.Widget: TreeGUI.Class
+--- @class TreeGUI.Widget: TreeGUI.Class, TreeGUI.Resource.Owner
 --- @field on_tree_entered TreeGUI.Signal<fun(tree: TreeGUI.Tree)> Called when the Widget enters a Tree.
 --- @field on_tree_exited TreeGUI.Signal<fun(tree: TreeGUI.Tree)> Called when the Widget leaves a Tree.
 --- @field on_child_entered TreeGUI.Signal<fun(child: TreeGUI.Widget)> Called when a child enters the Widget.

@@ -10,7 +10,7 @@ local Signal = require(ROOT .. ".core.signal") --- @type TreeGUI.Signal
 
 --- Responsible for handling input, updating, managing states and rendering Widget's.
 --- Without a Tree, a Widget becomes a ghost object.
---- @class TreeGUI.Tree: TreeGUI.Class
+--- @class TreeGUI.Tree: TreeGUI.Class, TreeGUI.Resource.Owner
 --- @field on_child_entered TreeGUI.Signal<fun(child: TreeGUI.Widget)> Called when a child enters the Tree.
 --- @field on_child_exited TreeGUI.Signal<fun(child: TreeGUI.Widget)> Called when a child leaves the Tree.
 --- @field on_layout_updated TreeGUI.Signal<fun()> Called when the Tree layout is updated.

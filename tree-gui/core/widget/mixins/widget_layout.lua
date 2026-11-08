@@ -105,6 +105,8 @@ function Widget:_resolveFreeLayout(parent_width, parent_height)
         self._width = math.max(self._width, min_width)
         self._height = math.max(self._height, min_height)
     end
+
+    self:_emitSignal(self.on_layout_updated)
 end
 
 --#endregion

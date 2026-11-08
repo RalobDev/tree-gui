@@ -161,6 +161,17 @@ end
 --- @return boolean consumed
 function Widget:_receiveMouse(handler, tx, ty, ...)
     local lx, ly = self:toLocal(tx, ty)
+
+    if handler == "_onMousePressed" then
+        self:_emitSignal(self.on_mousepressed, tx, ty, ...)
+    elseif handler == "_onMouseReleased" then
+        self:_emitSignal(self.on_mousereleased, tx, ty, ...)
+    elseif handler == "_onMouseMoved" then
+        self:_emitSignal(self.on_mousemoved, tx, ty, ...)
+    elseif handler == "_onWheelMoved" then
+        self:_emitSignal(self.on_wheelmoved, tx, ty, ...)
+    end
+
     return self[handler](self, lx, ly, ...) == true
 end
 

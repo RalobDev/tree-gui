@@ -150,6 +150,13 @@ function Widget:_render()
 
     Render.popModulateAlpha()
     self:_popDraw()
+
+    if self.on_draw:getConnectionCount() > 0 then
+        self:_pushDraw()
+        self:_applyVisualTransform()
+        self:_emitSignal(self.on_draw)
+        self:_popDraw()
+    end
 end
 
 --- Renders the Widget debug, internally calling _drawDebug().
@@ -202,6 +209,7 @@ function Widget:setVisible(visible)
     if visible == self._visible then return end
 
     self._visible = visible
+    self:_emitSignal(self.on_visibilty_changed, visible)
     self:_queueLayout()
     if not visible then self:_releaseInputState() end
 end

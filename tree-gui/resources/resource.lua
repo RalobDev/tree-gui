@@ -30,13 +30,6 @@ local RESERVED = {
 --- @class TreeGUI.Resource.Owner
 --- @field _onResourceChanged fun(self: TreeGUI.Resource.Owner, resource: TreeGUI.Resource)
 
---- Color stored by Resources.
---- @class TreeGUI.Resource.Rgba
---- @field r number
---- @field g number
---- @field b number
---- @field a number
-
 --- Maps original objects (Resources and plain tables) to their clones during a `duplicate()`.
 --- @alias TreeGUI.Resource.Memo table<table, table>
 
@@ -69,6 +62,7 @@ function Resource:new(props)
     obj._batch_depth = 0
     obj._batch_pending = false
     obj._emitting = false
+    obj._locked = false
 
     if props then obj:configure(props) end
 
@@ -249,19 +243,15 @@ end
 
 --- Validates and copies a color into `target`. Returns `true` if the stored value changed.
 --- @protected
---- @overload fun(self: TreeGUI.Resource, target: TreeGUI.Resource.Rgba, color: TreeGUI.Color): boolean
---- @param target TreeGUI.Resource.Rgba
+--- @param target TreeGUI.Color
 --- @param r number
 --- @param g number
 --- @param b number
 --- @param a number?
 --- @return boolean changed
 function Resource:_writeColor(target, r, g, b, a)
-    if type(r) == "table" then
-        r, g, b, a = unpack(r)
-    end
-
-    if type(r) ~= "number" or type(g) ~= "number" or type(b) ~= "number"
+    if
+        type(r) ~= "number" or type(g) ~= "number" or type(b) ~= "number"
         or (a ~= nil and type(a) ~= "number")
         or r ~= r or g ~= g or b ~= b or a ~= a
     then
@@ -269,9 +259,9 @@ function Resource:_writeColor(target, r, g, b, a)
     end
 
     a = a or 1
-    if target.r == r and target.g == g and target.b == b and target.a == a then return false end
+    if target[1] == r and target[2] == g and target[3] == b and target[4] == a then return false end
 
-    target.r, target.g, target.b, target.a = r, g, b, a
+    target[1], target[2], target[3], target[4] = r, g, b, a
     return true
 end
 

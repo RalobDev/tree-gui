@@ -6,6 +6,7 @@ Enums.ClassName = {
     Class = "Class",
     ColorRect = "ColorRect",
     Container = "Container",
+    Label = "Label",
     Panel = "Panel",
     Resource = "Resource",
     Signal = "Signal",
@@ -13,6 +14,7 @@ Enums.ClassName = {
     StackContainerH = "StackContainerH",
     StackContainerV = "StackContainerV",
     StyleBox = "StyleBox",
+    TextSettings = "TextSettings",
     Theme = "Theme",
     Tree = "Tree",
     Widget = "Widget",
@@ -22,6 +24,7 @@ Enums.ClassName = {
 Enums.ThemeType = {
     ColorRect = "ColorRect",
     Container = "Container",
+    Label = "Label",
     Panel = "Panel",
     StackContainer = "StackContainer",
     StackContainerH = "StackContainerH",
@@ -121,6 +124,21 @@ Enums.FocusSide = {
 Enums.Orientation = {
     HORIZONTAL = "HORIZONTAL",
     VERTICAL = "VERTICAL"
+}
+
+--- @enum TreeGUI.Enums.TextAlignmentHorizontal
+Enums.TextAlignmentHorizontal = {
+    BEGIN = "BEGIN",
+    CENTER = "CENTER",
+    END = "END",
+    JUSTIFY = "JUSTIFY"
+}
+
+--- @enum TreeGUI.Enums.TextAlignmentVertical
+Enums.TextAlignmentVertical = {
+    BEGIN = "BEGIN",
+    CENTER = "CENTER",
+    END = "END"
 }
 
 return Enums

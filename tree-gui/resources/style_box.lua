@@ -480,6 +480,7 @@ end
 --- Sets the anti-aliasing size.
 --- @param size number
 function StyleBox:setAntiAliasingSize(size)
+    size = math.max(size, 0)
     if self._anti_aliasing_size ~= size then
         self._anti_aliasing_size = size
         self:_emitChanged()

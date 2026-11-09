@@ -3,7 +3,7 @@
 
 --- Theme data: one optional style table per Widget type name.
 --- @class TreeGUI.Theme.Data
---- @field Button TreeGUI.Theme.ButtonStyle
+--- @field Button TreeGUI.Theme.ButtonStyle?
 --- @field ColorRect TreeGUI.Theme.WidgetStyle?
 --- @field Container TreeGUI.Theme.ContainerStyle?
 --- @field Label TreeGUI.Theme.LabelStyle?

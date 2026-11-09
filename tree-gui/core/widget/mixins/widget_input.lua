@@ -33,7 +33,7 @@ function Widget:releaseMouse()
 end
 
 function Widget:grabFocus()
-    if self._tree and self._focus_mode ~= Enums.FocusMode.NONE and self:isVisibleInTree() then
+    if self._tree and self._focus_mode ~= Enums.FocusMode.NONE and self:isFocusable() and self:isVisibleInTree() then
         self._tree:setFocusOwner(self)
     end
 end
@@ -109,6 +109,11 @@ function Widget:_onFocusEntered() end
 
 --- @protected
 function Widget:_onFocusExited() end
+
+--- @protected
+--- @nodiscard
+--- @return boolean is_focusable
+function Widget:_checkFocusable() return true end
 
 --#endregion
 
@@ -221,6 +226,12 @@ function Widget:hasFocus()
 end
 
 --- @nodiscard
+--- @return boolean is_focusable
+function Widget:isFocusable()
+    return self:_checkFocusable()
+end
+
+--- @nodiscard
 --- @return boolean is_hovered
 function Widget:isHovered()
     return self._tree ~= nil and self._tree:getHovered() == self
@@ -270,6 +281,7 @@ function Widget:_getFocusNeighbor(side)
         and neighbor._tree == self._tree
         and neighbor._focus_mode == Enums.FocusMode.ALL
         and neighbor:isVisibleInTree()
+        and neighbor:isFocusable()
     then
         return neighbor
     end

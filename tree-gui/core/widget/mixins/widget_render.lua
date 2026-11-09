@@ -120,6 +120,11 @@ function Widget:_drawAnchorsDebug()
     love.graphics.pop()
 end
 
+--- @protected
+--- @param is_visible boolean
+function Widget:_onVisibilityChanged(is_visible)
+end
+
 --#endregion
 
 
@@ -209,6 +214,7 @@ function Widget:setVisible(visible)
     if visible == self._visible then return end
 
     self._visible = visible
+    self:_onVisibilityChanged(visible)
     self:_emitSignal(self.on_visibilty_changed, visible)
     self:_queueLayout()
     if not visible then self:_releaseInputState() end

@@ -2,6 +2,7 @@ local ROOT = (...):match("^(.*)" .. string.rep("%.[^%.]+", 2) .. "$") --- @type 
 
 local Widget = require(ROOT .. ".core.widget.widget") --- @type TreeGUI.Widget
 local Render = require(ROOT .. ".tools.render_tool") --- @type TreeGUI.Render
+local Text = require(ROOT .. ".tools.text_tool") --- @type TreeGUI.Text
 local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 
 --- @class TreeGUI.Label: TreeGUI.Widget
@@ -10,25 +11,9 @@ local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 --- @field private _alignment_horizontal TreeGUI.Enums.TextAlignmentHorizontal
 --- @field private _alignment_vertical TreeGUI.Enums.TextAlignmentVertical
 --- @field private _wrapped_width number? Width used by the last minimum-size measurement (wrap only).
---- @field private _measure_cache { font: love.Font, text: string, limit: number, width: number, height: number }?
+--- @field private _measure_cache TreeGUI.Text.MeasureCache
 --- @field private _style_override TreeGUI.Theme.LabelStyle
 local Label = Widget:extend("Label")
-
---- @type table<TreeGUI.Enums.TextAlignmentHorizontal, love.AlignMode>
-local HORIZONTAL_ALIGN = {
-    BEGIN = "left",
-    CENTER = "center",
-    END = "right",
-    JUSTIFY = "justify",
-}
-
---- Fraction of the free vertical space placed above the text.
---- @type table<TreeGUI.Enums.TextAlignmentVertical, number>
-local VERTICAL_ALIGN = {
-    BEGIN = 0,
-    CENTER = 0.5,
-    END = 1,
-}
 
 
 --#region Definitions
@@ -70,6 +55,7 @@ function Label:new(props)
     obj._wrap = obj._wrap or false
     obj._alignment_horizontal = obj._alignment_horizontal or Enums.TextAlignmentHorizontal.BEGIN
     obj._alignment_vertical = obj._alignment_vertical or Enums.TextAlignmentVertical.BEGIN
+    obj._measure_cache = {}
 
     return obj
 end
@@ -135,14 +121,16 @@ function Label:_draw()
     local font = self:getTextSettings():getFont()
     local text_width, text_height = self:_measure(font, wrap and self:_getWrapLimit() or math.huge)
 
-    -- Without wrap the limit can never be smaller than the text, or printf would break the line.
-    local limit = wrap and width or math.max(width, text_width)
-
-    -- Floored to avoid blurry text.
-    local y = math.floor(math.max(0, height - text_height) * VERTICAL_ALIGN[self._alignment_vertical])
-
     Render.setColor(self:getTextSettings():getColor())
-    love.graphics.printf(text, font, 0, y, limit, HORIZONTAL_ALIGN[self._alignment_horizontal])
+    Text.draw(
+        text,
+        font,
+        0, 0,
+        width, height,
+        self._alignment_horizontal, self._alignment_vertical,
+        wrap,
+        text_width, text_height
+    )
 end
 
 --- @protected
@@ -173,20 +161,7 @@ end
 --- @param limit number
 --- @return number width, number height
 function Label:_measure(font, limit)
-    local text = self._text
-    local cache = self._measure_cache
-
-    if cache and cache.font == font and cache.text == text and cache.limit == limit then
-        return cache.width, cache.height
-    end
-
-    local width, lines = font:getWrap(text, limit)
-    local line_height = font:getHeight()
-    local height = line_height * font:getLineHeight() * (math.max(#lines, 1) - 1) + line_height
-
-    self._measure_cache = { font = font, text = text, limit = limit, width = width, height = height }
-
-    return width, height
+    return Text.measure(self._measure_cache, font, self._text, limit)
 end
 
 --#endregion

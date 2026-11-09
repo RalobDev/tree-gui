@@ -113,6 +113,11 @@ function Widget:_addInternalChild(child)
     self:_insertChild(child)
 end
 
+--- @protected
+--- @param tree TreeGUI.Tree
+function Widget:_onTreeExited(tree)
+end
+
 --#endregion
 
 

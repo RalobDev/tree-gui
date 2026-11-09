@@ -3,6 +3,8 @@ local Enums = {}
 
 --- @enum TreeGUI.Enums.ClassName
 Enums.ClassName = {
+    BaseButton = "BaseButton",
+    Button = "Button",
     Class = "Class",
     ColorRect = "ColorRect",
     Container = "Container",
@@ -22,6 +24,7 @@ Enums.ClassName = {
 
 --- @enum TreeGUI.Enums.ThemeType
 Enums.ThemeType = {
+    Button = "Button",
     ColorRect = "ColorRect",
     Container = "Container",
     Label = "Label",
@@ -139,6 +142,21 @@ Enums.TextAlignmentVertical = {
     BEGIN = "BEGIN",
     CENTER = "CENTER",
     END = "END"
+}
+
+--- @enum TreeGUI.Enums.ActionMode
+Enums.ActionMode = {
+    PRESS = "PRESS",
+    RELEASE = "RELEASE"
+}
+
+--- @enum TreeGUI.Enums.DrawMode
+Enums.DrawMode = {
+    NORMAL = "NORMAL",
+    PRESSED = "PRESSED",
+    HOVER = "HOVER",
+    HOVER_PRESSED = "HOVER_PRESSED",
+    DISABLED = "DISABLED",
 }
 
 return Enums

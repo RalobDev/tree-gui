@@ -136,11 +136,13 @@ function TextSettings:new(props)
 end
 
 --- @param props TreeGUI.TextSettings.Props
+--- @return self
 function TextSettings:configure(props)
     self:_checkLock()
     self:_batch(self._applyProps, props)
 
     Resource.configure(self, props)
+    return self
 end
 
 --#endregion

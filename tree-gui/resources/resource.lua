@@ -71,8 +71,10 @@ end
 
 --- NOTE: Must be called after `_batch()` in configure. Calling beforehand causes an error, as the Resource is locked.
 --- @param props TreeGUI.Resource.Props
+--- @return self
 function Resource:configure(props)
     self._locked = props.lock == true
+    return self
 end
 
 --- Returns a deep copy of the Resource.

@@ -166,11 +166,13 @@ function StyleBox:new(props)
 end
 
 --- @param props TreeGUI.StyleBox.Props
+--- @return self
 function StyleBox:configure(props)
     self:_checkLock()
     self:_batch(self._applyProps, props)
 
     Resource.configure(self, props)
+    return self
 end
 
 --- Draws the StyleBox in the rectangle (x, y, width, height).

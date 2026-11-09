@@ -66,12 +66,14 @@ function Theme:new(props)
 end
 
 --- @param props TreeGUI.Theme.Props
+--- @return self
 function Theme:configure(props)
     self:_checkLock()
 
     self:_batch(self._applyProps, props)
 
     Resource.configure(self, props)
+    return self
 end
 
 --#endregion

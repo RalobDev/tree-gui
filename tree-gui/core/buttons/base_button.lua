@@ -86,6 +86,13 @@ end
 --#region Protected
 
 --- @protected
+--- @nodiscard
+--- @return boolean is_focusable
+function BaseButton:_checkFocusable()
+    return not self._disabled
+end
+
+--- @protected
 --- @param tree TreeGUI.Tree
 function BaseButton:_onTreeExited(tree)
     self:_cancelPress()
@@ -117,11 +124,6 @@ function BaseButton:_onToggled(is_pressed) end
 function BaseButton:_onMousePressed(x, y, button, istouch, presses)
     if not self._button_mask[button] then return false end
     if self._press_source ~= nil then return true end
-
-    if self._disabled then
-        self:releaseFocus()
-        return true
-    end
 
     self._press_source = button
     self:captureMouse() -- keeps receiving move/release even when the pointer leaves the button

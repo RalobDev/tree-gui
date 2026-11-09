@@ -87,7 +87,7 @@ end
 --- @param list TreeGUI.Widget[]
 local function collectFocusable(widget, list)
     if not widget._visible or widget._opacity <= 0 then return end
-    if widget._focus_mode == Enums.FocusMode.ALL then list[#list+1] = widget end
+    if widget._focus_mode == Enums.FocusMode.ALL and widget:isFocusable() then list[#list+1] = widget end
     for _, child in ipairs(widget._children) do
         collectFocusable(child, list)
     end
@@ -423,7 +423,7 @@ function Tree:mousepressed(x, y, button, istouch, presses)
         local filter = w._mouse_filter
         if filter ~= Enums.MouseFilter.IGNORE then
             -- First widget in the chain that accepts click-focus gets it (before its handler runs).
-            if not focus_taken and w._focus_mode ~= Enums.FocusMode.NONE then
+            if not focus_taken and w._focus_mode ~= Enums.FocusMode.NONE and w:isFocusable() then
                 self:_setFocusOwner(w)
                 focus_taken = true
             end

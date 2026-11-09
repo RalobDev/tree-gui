@@ -22,7 +22,7 @@ local theme = Theme:new {
             padding_right = 0,
             padding_bottom = 0
         },
-        Label = { text_settings = TextSettings:new() },
+        Label = { text_settings = TextSettings:new { lock = true } },
         Panel = {
             style_box = StyleBox:new {
                 lock = true,

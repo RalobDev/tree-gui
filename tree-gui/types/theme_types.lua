@@ -32,6 +32,18 @@
 --- @field margin_bottom number?
 
 --- @class TreeGUI.Theme.ButtonStyle
+--- @field text_settings TreeGUI.TextSettings?
+--- @field style_box_normal TreeGUI.StyleBox?
+--- @field style_box_hover TreeGUI.StyleBox?
+--- @field style_box_pressed TreeGUI.StyleBox?
+--- @field style_box_hover_pressed TreeGUI.StyleBox?
+--- @field style_box_disabled TreeGUI.StyleBox?
+--- @field style_box_focus TreeGUI.StyleBox?
+--- @field font_normal_color TreeGUI.Color?
+--- @field font_hover_color TreeGUI.Color?
+--- @field font_pressed_color TreeGUI.Color?
+--- @field font_hover_pressed_color TreeGUI.Color?
+--- @field font_disabled_color TreeGUI.Color?
 
 --- @class TreeGUI.Theme.ContainerStyle: TreeGUI.Theme.WidgetStyle
 --- @field padding_left number?

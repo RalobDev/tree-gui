@@ -11,7 +11,7 @@ local Enums = require(ROOT .. ".types.enums") --- @type TreeGUI.Enums
 --- @field private _alignment_horizontal TreeGUI.Enums.TextAlignmentHorizontal
 --- @field private _alignment_vertical TreeGUI.Enums.TextAlignmentVertical
 --- @field private _wrapped_width number? Width used by the last minimum-size measurement (wrap only).
---- @field private _measure_cache { font: love.Font, text: string, limit: number, width: number, height: number }?
+--- @field private _measure_cache TreeGUI.Text.MeasureCache
 --- @field private _style_override TreeGUI.Theme.LabelStyle
 local Label = Widget:extend("Label")
 

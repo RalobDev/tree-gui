@@ -13,12 +13,19 @@ local H_FACTOR = { BEGIN = 0, CENTER = 0.5, END = 1, JUSTIFY = 0 }
 local V_FACTOR = { BEGIN = 0, CENTER = 0.5, END = 1 }
 
 
+--#region Definitions
+
+--- @alias TreeGUI.Text.MeasureCache { font: love.Font, text: string, limit: number, width: number, height: number }
+
+--#endregion
+
+
 --#region Public
 
 --- Size of `text` for a font and wrap limit (`math.huge` = no wrap).
 --- `cache` is a table owned by the caller (one per widget); it keeps the last result,
 --- since this is requested on every layout and every draw.
---- @param cache table
+--- @param cache TreeGUI.Text.MeasureCache
 --- @param font love.Font
 --- @param text string
 --- @param limit number

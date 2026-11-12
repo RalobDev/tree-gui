@@ -46,6 +46,19 @@ local function lookup(theme, chain, key)
     return nil
 end
 
+--- Returns the effective variant: that of the widget itself or that of the closest ancestor that has one.
+--- @param widget TreeGUI.Widget
+--- @return string?
+local function getEffectiveVariant(widget)
+    local current = widget --- @type TreeGUI.Widget?
+    while current do
+        if current._theme_variant then return current._theme_variant end
+        current = current._parent
+    end
+
+    return nil
+end
+
 --#endregion
 
 
@@ -188,14 +201,15 @@ function Widget:_getStyleValue(key, ignore_override)
 
     local chain = getStyleChain(self)
     local type_name = self:getClassName() --- @cast type_name TreeGUI.Enums.ThemeType
+    local variant = getEffectiveVariant(self)
 
     local current = self --- @type TreeGUI.Widget?
     while current do
         if current._theme then
             local value = nil
 
-            if self._theme_variant then
-                value = current._theme:getVariantStyleValue(type_name, self._theme_variant, key)
+            if variant then
+                value = current._theme:getVariantStyleValue(type_name, variant, key)
                 if value ~= nil then return value end
             end
 
@@ -210,8 +224,8 @@ function Widget:_getStyleValue(key, ignore_override)
         if tree_theme then
             local value = nil
 
-            if self._theme_variant then
-                value = tree_theme:getVariantStyleValue(type_name, self._theme_variant, key)
+            if variant then
+                value = tree_theme:getVariantStyleValue(type_name, variant, key)
                 if value ~= nil then return value end
             end
 

@@ -26,6 +26,10 @@ local ACCEPT_KEYS = { ["return"] = true, kpenter = true, space = true }
 --#region Definitions
 
 --- @class TreeGUI.BaseButton.Props: TreeGUI.Widget.Props
+--- @field on_pressed fun()?
+--- @field on_button_down fun()?
+--- @field on_button_up fun()?
+--- @field on_toggled fun(is_pressed: boolean)?
 --- @field disabled boolean?
 --- @field toggle_mode boolean?
 --- @field pressed boolean? Initial toggle state (no signal emitted). Requires `toggle_mode`.
@@ -71,6 +75,11 @@ end
 --- @param props TreeGUI.BaseButton.Props
 function BaseButton:configure(props)
     Widget.configure(self, props)
+
+    if props.on_pressed then self.on_pressed:connect(props.on_pressed) end
+    if props.on_button_down then self.on_button_down:connect(props.on_button_down) end
+    if props.on_button_up then self.on_button_up:connect(props.on_button_up) end
+    if props.on_toggled then self.on_toggled:connect(props.on_toggled) end
 
     if props.disabled ~= nil then self:setDisabled(props.disabled) end
     if props.toggle_mode ~= nil then self:setToggleMode(props.toggle_mode) end

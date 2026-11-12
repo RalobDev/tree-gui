@@ -48,6 +48,17 @@ local NAV_KEYS = {
 --#region Definitions
 
 --- @class TreeGUI.Tree.Props
+--- @field on_child_entered fun(child: TreeGUI.Widget)?
+--- @field on_child_exited fun(child: TreeGUI.Widget)?
+--- @field on_layout_updated fun()?
+--- @field on_focus_changed fun(new_owner: TreeGUI.Widget?, old_owner: TreeGUI.Widget?)?
+--- @field on_hovered_changed fun(new_hovered: TreeGUI.Widget?, old_hovered: TreeGUI.Widget?)?
+--- @field on_keypressed fun(key: love.KeyConstant, scancode: love.Scancode, isrepeat: boolean)?
+--- @field on_keyreleased fun(key: love.KeyConstant, scancode: love.Scancode)?
+--- @field on_mousepressed fun(x: number, y: number, button: number, istouch: boolean, presses: number)?
+--- @field on_mousereleased fun(x: number, y: number, button: number, istouch: boolean, presses: number)?
+--- @field on_mousemoved fun(x: number, y: number, dx: number, dy: number, istouch: boolean)?
+--- @field on_wheelmoved fun(x: number, y: number)?
 --- @field children TreeGUI.Widget[]?
 --- @field x number?
 --- @field y number?
@@ -183,6 +194,18 @@ end
 --- NOTE: This method always updates the layout of the Widget and its children, so don't call it every frame.
 --- @param props TreeGUI.Tree.Props
 function Tree:configure(props)
+    if props.on_child_entered then self.on_child_entered:connect(props.on_child_entered) end
+    if props.on_child_exited then self.on_child_exited:connect(props.on_child_exited) end
+    if props.on_layout_updated then self.on_layout_updated:connect(props.on_layout_updated) end
+    if props.on_focus_changed then self.on_focus_changed:connect(props.on_focus_changed) end
+    if props.on_hovered_changed then self.on_hovered_changed:connect(props.on_hovered_changed) end
+    if props.on_keypressed then self.on_keypressed:connect(props.on_keypressed) end
+    if props.on_keyreleased then self.on_keyreleased:connect(props.on_keyreleased) end
+    if props.on_mousepressed then self.on_mousepressed:connect(props.on_mousepressed) end
+    if props.on_mousereleased then self.on_mousereleased:connect(props.on_mousereleased) end
+    if props.on_mousemoved then self.on_mousemoved:connect(props.on_mousemoved) end
+    if props.on_wheelmoved then self.on_wheelmoved:connect(props.on_wheelmoved) end
+
     if props.x then self._x = props.x end
     if props.y then self._y = props.y end
     if props.width then self._width = props.width end
